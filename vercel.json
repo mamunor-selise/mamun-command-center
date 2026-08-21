@@ -1,6 +1,11 @@
 {
   "rewrites": [
+    { "source": "/api/auth/signup", "destination": "/api/auth/signup.js" },
+    { "source": "/api/auth/signin", "destination": "/api/auth/signin.js" },
+    { "source": "/api/auth/me", "destination": "/api/auth/me.js" },
+    { "source": "/api/auth/logout", "destination": "/api/auth/logout.js" },
     { "source": "/api/chat", "destination": "/api/chat.js" },
+    { "source": "/api/cv", "destination": "/api/cv.js" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

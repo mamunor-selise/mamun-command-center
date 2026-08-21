@@ -5,6 +5,7 @@ import signinHandler from './api/auth/signin.js';
 import meHandler from './api/auth/me.js';
 import logoutHandler from './api/auth/logout.js';
 import chatHandler from './api/chat.js';
+import cvHandler from './api/cv.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -66,6 +67,8 @@ const server = http.createServer(async (req, res) => {
         await logoutHandler(req, res);
       } else if (pathname === '/api/chat') {
         await chatHandler(req, res);
+      } else if (pathname === '/api/cv') {
+        await cvHandler(req, res);
       } else {
         res.status(404).json({ error: { message: `Route ${pathname} not found on API server.` } });
       }
