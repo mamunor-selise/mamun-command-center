@@ -71,7 +71,7 @@ export class ChatbotService {
 
   async sendChatMessage(messages: ChatMessage[]): Promise<string> {
     this.isThinking.set(true);
-
+    console.log(this.apiKey(), '=========>apikey');
     try {
       const apiMessages = [
         {
