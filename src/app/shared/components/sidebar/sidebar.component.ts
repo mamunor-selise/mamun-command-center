@@ -147,6 +147,7 @@ export class SidebarComponent {
     { label: 'Daily Routine', route: '/routine', icon: '📅' },
     { label: 'CV Management', route: '/cv-management', icon: '📄' },
     { label: 'Quiz Test Engine', route: '/quiz-test', icon: '🧪', badge: 'v1.0' },
+    { label: 'Password Vault', route: '/vault', icon: '🔐', badge: 'AES' },
   ];
 
   @HostListener('window:resize', ['$event'])

@@ -6,6 +6,7 @@
     { "source": "/api/auth/logout", "destination": "/api/auth/logout.js" },
     { "source": "/api/chat", "destination": "/api/chat.js" },
     { "source": "/api/cv", "destination": "/api/cv.js" },
+    { "source": "/api/vault", "destination": "/api/vault.js" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
