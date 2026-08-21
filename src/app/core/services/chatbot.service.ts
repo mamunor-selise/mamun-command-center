@@ -34,7 +34,6 @@ export class ChatbotService {
   ];
 
   constructor() {
-    // Initial key from environment variable (e.g. GitHub Secret / process.env)
     let initialKey = environment.openRouterApiKey || '';
 
     if (isPlatformBrowser(this.platformId)) {
@@ -71,11 +70,6 @@ export class ChatbotService {
   }
 
   async sendChatMessage(messages: ChatMessage[]): Promise<string> {
-    const activeKey = this.apiKey().trim();
-    if (!activeKey) {
-      throw new Error('OpenRouter API key is missing. Please set your API Key (OPEN_ROUTER_API_KEY) in settings.');
-    }
-
     this.isThinking.set(true);
 
     try {
@@ -90,19 +84,61 @@ export class ChatbotService {
         }))
       ];
 
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${activeKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'http://localhost:4200',
-          'X-Title': 'Mamun Command Center'
-        },
-        body: JSON.stringify({
-          model: this.selectedModel(),
-          messages: apiMessages
-        })
+      const userCustomKey = this.apiKey().trim();
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json'
+      };
+
+      if (userCustomKey) {
+        headers['X-Client-Api-Key'] = userCustomKey;
+        headers['Authorization'] = `Bearer ${userCustomKey}`;
+      }
+
+      const body = JSON.stringify({
+        model: this.selectedModel(),
+        messages: apiMessages
       });
+
+      let response: Response;
+
+      // 1. Try Vercel Serverless Function Endpoint (/api/chat)
+      try {
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers,
+          body
+        });
+
+        // If local dev without vercel api (404) and user has custom key, call OpenRouter directly
+        if (response.status === 404 && userCustomKey) {
+          response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${userCustomKey}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': 'http://localhost:4200',
+              'X-Title': 'Mamun Command Center'
+            },
+            body
+          });
+        }
+      } catch (networkErr) {
+        // Fallback for direct client-side fetch if /api/chat is unreachable
+        if (userCustomKey) {
+          response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${userCustomKey}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': 'http://localhost:4200',
+              'X-Title': 'Mamun Command Center'
+            },
+            body
+          });
+        } else {
+          throw networkErr;
+        }
+      }
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -114,7 +150,7 @@ export class ChatbotService {
       const botReply = data.choices?.[0]?.message?.content;
 
       if (!botReply) {
-        throw new Error('Received an empty response from OpenRouter API.');
+        throw new Error('Received an empty response from OpenRouter AI.');
       }
 
       return botReply.trim();
