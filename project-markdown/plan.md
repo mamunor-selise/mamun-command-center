@@ -75,6 +75,9 @@ Database Name - AE3EEEDC-E790-4CDB-96D5-2DD31F26C9CC
 - [ ] Create CV Variant generator (filtering components by role).
 - [ ] Integrate export pipeline.
 - [ ] Design clean, modern resume templates.
+-- Missing in CV - Career Objective and Summary can help to AI Assistant or chatbot
+-- add 2 more section to CV - Awards, Certification
+-- Extra curriculam activity
 
 ### **Phase 4: Quiz & Knowledge Test System (Week 4)**
 - [ ] Build Question Bank creation & tag management interface.

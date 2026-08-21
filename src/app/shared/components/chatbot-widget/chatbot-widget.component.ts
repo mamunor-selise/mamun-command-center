@@ -2,6 +2,7 @@ import { Component, signal, inject, ElementRef, ViewChild, AfterViewChecked } fr
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatbotService, ChatMessage } from '../../../core/services/chatbot.service';
+import { CvService } from '../../../core/services/cv.service';
 
 @Component({
   selector: 'app-chatbot-widget',
@@ -98,127 +99,98 @@ import { ChatbotService, ChatMessage } from '../../../core/services/chatbot.serv
                   />
                   <button
                     (click)="updateKey(keyInput.value)"
-                    type="button"
-                    class="px-3 py-2 bg-indigo-600 text-white font-medium rounded-xl text-xs hover:bg-indigo-500 transition-colors"
+                    class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 rounded-xl font-semibold transition-colors"
                   >
-                    Save
+                    Save Key
                   </button>
                 </div>
               </div>
-
-              <button
-                (click)="toggleSettings()"
-                type="button"
-                class="mt-auto w-full py-2 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-xl font-medium text-center hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors"
-              >
-                Back to Chat
-              </button>
             </div>
           } @else {
-            <!-- Messages Container -->
-            <div #scrollContainer class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50 dark:bg-slate-950/50 text-xs">
+            <!-- Chat Messages Log Container -->
+            <div #scrollContainer class="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50/50 dark:bg-slate-950/50">
               @for (msg of messages(); track msg.id) {
-                <div
-                  class="flex flex-col"
-                  [class.items-end]="msg.sender === 'user'"
-                  [class.items-start]="msg.sender === 'bot'"
-                >
-                  <div
-                    class="max-w-[85%] rounded-2xl px-3.5 py-2.5 shadow-sm whitespace-pre-wrap leading-relaxed border"
-                    [ngClass]="msg.sender === 'user' ? 'bg-indigo-600 text-white border-transparent' : (msg.isError ? 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-900' : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700')"
-                  >
-                    {{ msg.text }}
+                <div [ngClass]="msg.sender === 'user' ? 'justify-end' : 'justify-start'" class="flex items-start gap-2.5">
+                  @if (msg.sender === 'bot') {
+                    <div class="w-7 h-7 rounded-xl bg-indigo-600/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs shrink-0 font-bold mt-0.5">
+                      🤖
+                    </div>
+                  }
+                  <div [ngClass]="[
+                    msg.sender === 'user' ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-none shadow-sm' : 
+                    msg.isError ? 'bg-rose-50 dark:bg-rose-950/80 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 rounded-2xl rounded-tl-none' : 
+                    'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-2xl rounded-tl-none shadow-sm'
+                  ]" class="p-3 text-xs max-w-[82%] leading-relaxed font-sans select-text">
+                    <p class="whitespace-pre-wrap">{{ msg.text }}</p>
+                    <span [ngClass]="msg.sender === 'user' ? 'text-indigo-200' : 'text-slate-400'" class="text-[9px] block text-right mt-1 font-mono">
+                      {{ msg.timestamp }}
+                    </span>
                   </div>
-                  <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-1 px-1">{{ msg.timestamp }}</span>
                 </div>
               }
 
-              <!-- Thinking / Loading Indicator -->
               @if (chatbotService.isThinking()) {
-                <div class="flex flex-col items-start">
-                  <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 rounded-2xl px-4 py-3 shadow-sm flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-indigo-500 animate-bounce"></span>
-                    <span class="w-2 h-2 rounded-full bg-indigo-500 animate-bounce [animation-delay:0.2s]"></span>
-                    <span class="w-2 h-2 rounded-full bg-indigo-500 animate-bounce [animation-delay:0.4s]"></span>
-                  </div>
-                  <span class="text-[10px] text-slate-400 mt-1 px-1">Command AI is thinking...</span>
+                <div class="flex items-center gap-2 text-xs text-slate-400 animate-pulse">
+                  <div class="w-6 h-6 rounded-lg bg-indigo-600/10 flex items-center justify-center">🤖</div>
+                  <span>Command AI is typing response...</span>
                 </div>
               }
             </div>
 
-            <!-- Quick Action Prompts -->
-            <div class="px-3 py-2 bg-slate-100 dark:bg-slate-900/90 border-t border-slate-200 dark:border-slate-800 flex items-center gap-1.5 overflow-x-auto text-[11px]">
-              <button
-                (click)="sendQuickPrompt('Help me organize my daily routine priorities for today')"
-                type="button"
-                [disabled]="chatbotService.isThinking()"
-                class="whitespace-nowrap px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 border border-slate-300 dark:border-slate-700/70 hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors disabled:opacity-50"
-              >
-                📅 Routine Help
+            <!-- Quick Suggestions Toolbar -->
+            <div class="px-3 py-2 bg-slate-100 dark:bg-slate-900/90 border-t border-slate-200 dark:border-slate-800 flex gap-1.5 overflow-x-auto text-[10px]">
+              <button (click)="sendQuickPrompt('Review my Career Objective & CV summary')" class="px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-indigo-500 whitespace-nowrap">
+                📄 Optimize CV Objective
               </button>
-              <button
-                (click)="sendQuickPrompt('Write 3 high-impact CV bullet points for an Angular & Full-Stack Developer')"
-                type="button"
-                [disabled]="chatbotService.isThinking()"
-                class="whitespace-nowrap px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 border border-slate-300 dark:border-slate-700/70 hover:bg-emerald-50 dark:hover:bg-emerald-950 transition-colors disabled:opacity-50"
-              >
-                📄 CV Bullet Points
-              </button>
-              <button
-                (click)="sendQuickPrompt('Ask me a multiple choice quiz question on Angular Signals')"
-                type="button"
-                [disabled]="chatbotService.isThinking()"
-                class="whitespace-nowrap px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 text-amber-700 dark:text-amber-300 border border-slate-300 dark:border-slate-700/70 hover:bg-amber-50 dark:hover:bg-amber-950 transition-colors disabled:opacity-50"
-              >
-                🧪 Angular Quiz
+              <button (click)="sendQuickPrompt('Help me write 3 high-impact CV bullet points')" class="px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-indigo-500 whitespace-nowrap">
+                🚀 CV Bullet Points
               </button>
             </div>
 
-            <!-- Input Footer Form -->
+            <!-- Chat Footer Input Form -->
             <form (submit)="sendMessage($event)" class="p-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center gap-2">
               <input
                 type="text"
                 [(ngModel)]="newMessageText"
                 name="chatInput"
                 placeholder="Ask Command AI..."
-                [disabled]="chatbotService.isThinking()"
-                class="flex-1 bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 disabled:opacity-60"
+                class="flex-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
               <button
                 type="submit"
                 [disabled]="!newMessageText.trim() || chatbotService.isThinking()"
-                class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:hover:bg-indigo-600 text-white font-medium text-xs px-3.5 py-2 rounded-xl transition-all flex items-center gap-1"
+                class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white p-2 rounded-xl transition-all shadow-sm shrink-0"
               >
-                <span>Send</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
               </button>
             </form>
           }
         </div>
       }
 
-      <!-- Floating Trigger Button -->
+      <!-- Floating Launcher Button -->
       <button
         (click)="toggleChat()"
         type="button"
-        class="h-14 w-14 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white shadow-xl shadow-indigo-600/30 flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-all duration-200 ring-4 ring-white dark:ring-slate-900"
-        [title]="isOpen() ? 'Close AI Assistant' : 'Open OpenRouter AI Assistant'"
+        class="h-13 w-13 rounded-2xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white shadow-xl shadow-indigo-600/30 flex items-center justify-center text-xl transition-all duration-200 hover:scale-105 active:scale-95 border border-indigo-400/30"
+        title="Toggle Command AI Assistant"
       >
         @if (isOpen()) {
-          <span>✕</span>
+          ✕
         } @else {
-          <div class="relative">
-            <span>🤖</span>
-            <span class="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-slate-900 animate-pulse"></span>
-          </div>
+          🤖
         }
       </button>
     </div>
   `
 })
 export class ChatbotWidgetComponent implements AfterViewChecked {
-  chatbotService = inject(ChatbotService);
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
-  @ViewChild('scrollContainer') private scrollContainer?: ElementRef;
+  chatbotService = inject(ChatbotService);
+  cvService = inject(CvService);
 
   isOpen = signal<boolean>(false);
   showSettings = signal<boolean>(false);
@@ -226,9 +198,9 @@ export class ChatbotWidgetComponent implements AfterViewChecked {
 
   messages = signal<ChatMessage[]>([
     {
-      id: '1',
+      id: 'welcome',
       sender: 'bot',
-      text: 'Hello Mamun! I am your Command AI assistant powered by OpenRouter. How can I assist with your routine, CV, or technical quiz preparation today?',
+      text: 'Hello! I am Command AI. I have access to your Career Objective, CV profiles, and productivity schedule. How can I assist you today?',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -246,7 +218,8 @@ export class ChatbotWidgetComponent implements AfterViewChecked {
   }
 
   selectModel(modelId: string) {
-    this.chatbotService.setModel(modelId);
+    this.chatbotService.selectedModel.set(modelId);
+    this.showSettings.set(false);
   }
 
   updateKey(key: string) {
@@ -271,6 +244,19 @@ export class ChatbotWidgetComponent implements AfterViewChecked {
     const text = this.newMessageText.trim();
     if (!text || this.chatbotService.isThinking()) return;
 
+    // Attach CV Career Objective & Context if user asks about CV
+    const activeCv = this.cvService.activeProfile();
+    let promptWithContext = text;
+
+    if (activeCv && (text.toLowerCase().includes('cv') || text.toLowerCase().includes('resume') || text.toLowerCase().includes('objective') || text.toLowerCase().includes('bullet'))) {
+      promptWithContext = `[USER CV CONTEXT]
+Target Role: ${activeCv.targetRole}
+Career Objective: ${activeCv.personalInfo.careerObjective || 'Not specified'}
+Executive Summary: ${activeCv.personalInfo.summary || 'Not specified'}
+
+User Question: ${text}`;
+    }
+
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
       sender: 'user',
@@ -282,7 +268,15 @@ export class ChatbotWidgetComponent implements AfterViewChecked {
     this.newMessageText = '';
 
     try {
-      const botResponseText = await this.chatbotService.sendChatMessage(this.messages());
+      // Build context payload
+      const payloadMessages = this.messages().map(m => {
+        if (m.id === userMsg.id) {
+          return { ...m, text: promptWithContext };
+        }
+        return m;
+      });
+
+      const botResponseText = await this.chatbotService.sendChatMessage(payloadMessages);
       const botReply: ChatMessage = {
         id: (Date.now() + 1).toString(),
         sender: 'bot',

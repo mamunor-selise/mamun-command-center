@@ -1,8 +1,8 @@
 import { MongoClient } from 'mongodb';
 import crypto from 'crypto';
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://mamunorselise:Z3xxMP1KoVJIODlu@cluster0.e6whmmx.mongodb.net/mamun_command_center?retryWrites=true&w=majority&appName=Cluster0";
-const DB_NAME = 'mamun_command_center';
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://mamunorselise:Z3xxMP1KoVJIODlu@cluster0.e6whmmx.mongodb.net/AE3EEEDC-E790-4CDB-96D5-2DD31F26C9CC?retryWrites=true&w=majority&appName=Cluster0";
+const DB_NAME = process.env.DB_NAME || 'AE3EEEDC-E790-4CDB-96D5-2DD31F26C9CC';
 
 let cachedClient = global.mongoClient;
 let cachedDb = global.mongoDb;

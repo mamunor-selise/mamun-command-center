@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CvProfile, WorkExperience, Education, SkillCategory, Project, Certification, CvTemplateStyle } from '../../../../core/models/cv.model';
+import { CvProfile, WorkExperience, Education, SkillCategory, Project, Certification, Award, ExtraCurricular, Language, CvTemplateStyle } from '../../../../core/models/cv.model';
 
 @Component({
   selector: 'app-cv-editor',
@@ -89,6 +89,15 @@ import { CvProfile, WorkExperience, Education, SkillCategory, Project, Certifica
           </div>
         </div>
 
+        <!-- Career Objective (Phase 3 Requirement) -->
+        <div>
+          <label class="block font-medium mb-1 text-xs flex items-center justify-between">
+            <span>🎯 Career Objective (Used by AI Assistant & Resume Header)</span>
+            <span class="text-[10px] text-emerald-500 font-normal">Phase 3 Requirement</span>
+          </label>
+          <textarea rows="2" [(ngModel)]="profile.personalInfo.careerObjective" (ngModelChange)="onModelChange()" placeholder="To leverage 5+ years of software engineering expertise in building resilient enterprise platforms and leading AI innovation." class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-emerald-500 outline-none"></textarea>
+        </div>
+
         <div>
           <label class="block font-medium mb-1 text-xs">Professional Executive Summary</label>
           <textarea rows="3" [(ngModel)]="profile.personalInfo.summary" (ngModelChange)="onModelChange()" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-emerald-500 outline-none"></textarea>
@@ -99,46 +108,53 @@ import { CvProfile, WorkExperience, Education, SkillCategory, Project, Certifica
       <div *ngIf="activeTab === 'experience'" class="space-y-4 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold text-slate-900 dark:text-white">💼 Work Experience</h3>
-          <button (click)="addExperience()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
-            + Add Experience
+          <button (click)="addExperience()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+            <span>+ Add Position</span>
           </button>
         </div>
 
-        <div *ngFor="let exp of profile.experiences; let idx = index" class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+        <div *ngFor="let exp of profile.experiences; let i = index" class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 space-y-3 text-xs">
           <div class="flex items-center justify-between">
-            <span class="font-semibold text-xs text-emerald-600 dark:text-emerald-400">Position #{{ idx + 1 }}</span>
-            <button (click)="removeExperience(idx)" class="text-rose-500 hover:text-rose-600 text-xs font-medium">Remove</button>
+            <span class="font-bold text-slate-900 dark:text-white">#{{ i + 1 }} {{ exp.role || 'New Role' }} at {{ exp.company || 'Company' }}</span>
+            <button (click)="removeExperience(i)" class="text-rose-500 hover:text-rose-600 font-semibold">Remove</button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label class="block font-medium mb-1">Company / Organization</label>
-              <input type="text" [(ngModel)]="exp.company" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
+              <label class="block font-medium mb-1">Company Name</label>
+              <input type="text" [(ngModel)]="exp.company" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
             </div>
             <div>
-              <label class="block font-medium mb-1">Job Title / Role</label>
-              <input type="text" [(ngModel)]="exp.role" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
+              <label class="block font-medium mb-1">Job Role / Title</label>
+              <input type="text" [(ngModel)]="exp.role" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+              <label class="block font-medium mb-1">Location</label>
+              <input type="text" [(ngModel)]="exp.location" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div class="flex items-center gap-2 pt-5">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" [(ngModel)]="exp.isCurrent" (ngModelChange)="onModelChange()" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+                <span>Currently Working Here</span>
+              </label>
             </div>
             <div>
               <label class="block font-medium mb-1">Start Date</label>
-              <input type="text" [(ngModel)]="exp.startDate" (ngModelChange)="onModelChange()" placeholder="e.g. 2023-01" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
+              <input type="text" [(ngModel)]="exp.startDate" (ngModelChange)="onModelChange()" placeholder="2022-01" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
             </div>
             <div>
               <label class="block font-medium mb-1">End Date</label>
-              <input type="text" [(ngModel)]="exp.endDate" [disabled]="exp.isCurrent" (ngModelChange)="onModelChange()" placeholder="e.g. Present" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 disabled:opacity-50" />
+              <input type="text" [(ngModel)]="exp.endDate" [disabled]="exp.isCurrent" (ngModelChange)="onModelChange()" placeholder="Present or 2023-12" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white disabled:opacity-50" />
             </div>
           </div>
 
-          <!-- Bullet Points -->
-          <div class="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700">
-            <div class="flex items-center justify-between text-xs">
-              <label class="font-medium">Key Achievements & Bullet Points</label>
-              <button (click)="addBullet(exp)" class="text-emerald-600 dark:text-emerald-400 hover:underline">+ Add Bullet</button>
+          <div>
+            <label class="block font-medium mb-1">Key Responsibilities & Bullet Points</label>
+            <div *ngFor="let bullet of exp.bulletPoints; let bIndex = index; trackBy: trackByIndex" class="flex items-center gap-2 mb-2">
+              <input type="text" [(ngModel)]="exp.bulletPoints[bIndex]" (ngModelChange)="onModelChange()" class="flex-1 px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+              <button (click)="removeBulletPoint(exp, bIndex)" class="text-rose-500 hover:text-rose-600 text-xs">✕</button>
             </div>
-            <div *ngFor="let pt of exp.bulletPoints; let bIdx = index; trackBy: trackByIndex" class="flex items-center gap-2">
-              <input type="text" [(ngModel)]="exp.bulletPoints[bIdx]" (ngModelChange)="onModelChange()" class="flex-1 px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" />
-              <button (click)="removeBullet(exp, bIdx)" class="text-rose-500 text-xs px-1">✕</button>
-            </div>
+            <button (click)="addBulletPoint(exp)" class="text-emerald-600 dark:text-emerald-400 hover:underline text-xs font-semibold">+ Add Bullet Point</button>
           </div>
         </div>
       </div>
@@ -147,191 +163,300 @@ import { CvProfile, WorkExperience, Education, SkillCategory, Project, Certifica
       <div *ngIf="activeTab === 'projects'" class="space-y-4 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold text-slate-900 dark:text-white">🚀 Key Projects</h3>
-          <button (click)="addProject()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
-            + Add Project
+          <button (click)="addProject()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+            <span>+ Add Project</span>
           </button>
         </div>
 
-        <div *ngIf="!profile.projects || profile.projects.length === 0" class="text-xs text-slate-500 dark:text-slate-400 italic py-4 text-center">
-          No key projects added yet. Click "+ Add Project" to highlight your portfolio projects on your CV.
-        </div>
-
-        <div *ngFor="let proj of profile.projects; let idx = index" class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3 text-xs">
+        <div *ngFor="let proj of profile.projects; let pIndex = index" class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 space-y-3 text-xs">
           <div class="flex items-center justify-between">
-            <span class="font-semibold text-emerald-600 dark:text-emerald-400">Project #{{ idx + 1 }}</span>
-            <button (click)="removeProject(idx)" class="text-rose-500 hover:text-rose-600 text-xs font-medium">Remove</button>
+            <span class="font-bold text-slate-900 dark:text-white">#{{ pIndex + 1 }} {{ proj.title || 'New Project' }}</span>
+            <button (click)="removeProject(pIndex)" class="text-rose-500 hover:text-rose-600 font-semibold">Remove</button>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label class="block font-medium mb-1">Project Title</label>
-              <input type="text" [(ngModel)]="proj.title" (ngModelChange)="onModelChange()" placeholder="e.g. Mamun Command Center" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
+              <input type="text" [(ngModel)]="proj.title" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
             </div>
             <div>
-              <label class="block font-medium mb-1">Role / Contribution</label>
-              <input type="text" [(ngModel)]="proj.role" (ngModelChange)="onModelChange()" placeholder="e.g. Lead Developer & Architect" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
-            </div>
-            <div class="md:col-span-2">
-              <label class="block font-medium mb-1">Project Link / URL</label>
-              <input type="text" [(ngModel)]="proj.link" (ngModelChange)="onModelChange()" placeholder="https://github.com/username/project" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-mono" />
-            </div>
-            <div class="md:col-span-2">
-              <label class="block font-medium mb-1">Description & Impact</label>
-              <textarea rows="2" [(ngModel)]="proj.description" (ngModelChange)="onModelChange()" placeholder="Describe what the project does and key metrics..." class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800"></textarea>
+              <label class="block font-medium mb-1">Project Link / Repo URL</label>
+              <input type="text" [(ngModel)]="proj.link" (ngModelChange)="onModelChange()" placeholder="https://github.com/..." class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
             </div>
           </div>
 
-          <!-- Tech Stack Tags -->
-          <div class="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-700">
-            <label class="block font-medium text-slate-500 dark:text-slate-400">Tech Stack Tags</label>
-            <div class="flex flex-wrap gap-1.5 mb-1.5">
-              <span *ngFor="let tech of proj.techStack; let tIdx = index" class="inline-flex items-center gap-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded text-[10px]">
-                {{ tech }}
-                <button (click)="removeTechStackTag(proj, tIdx)" class="hover:text-rose-500 font-bold ml-1">✕</button>
+          <div>
+            <label class="block font-medium mb-1">Project Description & Impact</label>
+            <textarea rows="2" [(ngModel)]="proj.description" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"></textarea>
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1">Technologies & Tools Used</label>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span *ngFor="let tag of proj.techStack; let tIndex = index" class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs flex items-center gap-1">
+                {{ tag }}
+                <button (click)="removeTechStackTag(proj, tIndex)" class="hover:text-rose-500 font-bold ml-1">✕</button>
               </span>
             </div>
             <div class="flex items-center gap-2">
-              <input #techInput type="text" placeholder="Add tech (e.g. Angular, Node.js) & press Enter" (keyup.enter)="addTechStackTag(proj, techInput.value); techInput.value=''" class="flex-1 px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" />
-              <button (click)="addTechStackTag(proj, techInput.value); techInput.value=''" class="bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded text-xs font-medium">Add</button>
+              <input #techInput type="text" (keyup.enter)="addTechStackTag(proj, techInput.value); techInput.value = ''" placeholder="Type tech (e.g. Angular 19) & press Enter" class="flex-1 px-3 py-1 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs" />
+              <button (click)="addTechStackTag(proj, techInput.value); techInput.value = ''" class="px-3 py-1 bg-slate-200 dark:bg-slate-700 rounded text-xs">Add</button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- TAB 4: SKILLS & CATEGORIES -->
+      <!-- TAB 4: SKILLS -->
       <div *ngIf="activeTab === 'skills'" class="space-y-4 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold text-slate-900 dark:text-white">🛠️ Skills & Competencies</h3>
-          <button (click)="addSkillCategory()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
-            + Add Category
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white">📌 Skills & Technologies</h3>
+          <button (click)="addSkillCategory()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+            <span>+ Add Skill Category</span>
           </button>
         </div>
 
-        <div *ngFor="let cat of profile.skillCategories; let idx = index" class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
-          <div class="flex items-center justify-between gap-3 text-xs">
-            <input type="text" [(ngModel)]="cat.name" (ngModelChange)="onModelChange()" placeholder="Category Name (e.g. Frontend & UI)" class="font-bold px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs flex-1" />
-            <button (click)="removeSkillCategory(idx)" class="text-rose-500 hover:text-rose-600 text-xs">Remove</button>
+        <div *ngFor="let cat of profile.skillCategories; let cIndex = index" class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <input type="text" [(ngModel)]="cat.name" (ngModelChange)="onModelChange()" class="font-bold bg-transparent text-slate-900 dark:text-white border-b border-dashed border-slate-400 dark:border-slate-600 focus:outline-none" />
+            <button (click)="removeSkillCategory(cIndex)" class="text-rose-500 hover:text-rose-600 font-semibold">Remove Category</button>
           </div>
 
-          <div class="text-xs space-y-2">
-            <label class="block font-medium text-slate-500 dark:text-slate-400">Skills (Comma-separated or tag list)</label>
-            <div class="flex flex-wrap gap-1.5 mb-2">
-              <span *ngFor="let s of cat.skills; let sIdx = index" class="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded text-xs">
-                {{ s }}
-                <button (click)="removeSkillTag(cat, sIdx)" class="hover:text-rose-500 font-bold ml-1">✕</button>
-              </span>
-            </div>
-            <div class="flex items-center gap-2">
-              <input #newSkillInput type="text" placeholder="Type new skill & press Enter" (keyup.enter)="addSkillTag(cat, newSkillInput.value); newSkillInput.value=''" class="flex-1 px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" />
-              <button (click)="addSkillTag(cat, newSkillInput.value); newSkillInput.value=''" class="bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded text-xs font-medium">Add</button>
-            </div>
+          <div class="flex flex-wrap gap-1.5">
+            <span *ngFor="let skill of cat.skills; let sIndex = index" class="px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs flex items-center gap-1.5 shadow-sm">
+              {{ skill }}
+              <button (click)="removeSkillTag(cat, sIndex)" class="text-slate-400 hover:text-rose-500 font-bold">✕</button>
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 pt-2">
+            <input #skillInput type="text" (keyup.enter)="addSkillTag(cat, skillInput.value); skillInput.value = ''" placeholder="Type skill (e.g., RxJS, Docker) and press Enter" class="flex-1 px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            <button (click)="addSkillTag(cat, skillInput.value); skillInput.value = ''" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-medium">Add Skill</button>
           </div>
         </div>
       </div>
 
       <!-- TAB 5: EDUCATION & CERTIFICATIONS -->
-      <div *ngIf="activeTab === 'education'" class="space-y-4 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
-        <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold text-slate-900 dark:text-white">🎓 Education & Certifications</h3>
-          <button (click)="addEducation()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
-            + Add Education
-          </button>
-        </div>
-
-        <div *ngFor="let edu of profile.education; let idx = index" class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3 text-xs">
+      <div *ngIf="activeTab === 'education'" class="space-y-6 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
+        <!-- Education -->
+        <div class="space-y-4">
           <div class="flex items-center justify-between">
-            <span class="font-semibold text-emerald-600 dark:text-emerald-400">Education #{{ idx + 1 }}</span>
-            <button (click)="removeEducation(idx)" class="text-rose-500 hover:underline">Remove</button>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label class="block font-medium mb-1">Degree / Qualification</label>
-              <input type="text" [(ngModel)]="edu.degree" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
-            </div>
-            <div>
-              <label class="block font-medium mb-1">Institution</label>
-              <input type="text" [(ngModel)]="edu.institution" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
-            </div>
-            <div>
-              <label class="block font-medium mb-1">Dates</label>
-              <div class="flex items-center gap-2">
-                <input type="text" [(ngModel)]="edu.startDate" (ngModelChange)="onModelChange()" placeholder="Start" class="w-1/2 px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
-                <input type="text" [(ngModel)]="edu.endDate" (ngModelChange)="onModelChange()" placeholder="End" class="w-1/2 px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Certifications Section -->
-        <div class="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 class="font-semibold text-xs text-slate-900 dark:text-white">📜 Certifications & Credentials</h4>
-            <button (click)="addCertification()" class="text-emerald-600 dark:text-emerald-400 hover:underline text-xs">+ Add Certification</button>
+            <h3 class="text-base font-semibold text-slate-900 dark:text-white">🎓 Education</h3>
+            <button (click)="addEducation()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+              + Add Education
+            </button>
           </div>
 
-          <div *ngFor="let cert of profile.certifications; let cIdx = index" class="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-700 space-y-2 text-xs">
+          <div *ngFor="let edu of profile.education; let eIndex = index" class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 space-y-3 text-xs">
             <div class="flex items-center justify-between">
-              <span class="font-medium text-emerald-600 dark:text-emerald-400">Certification #{{ cIdx + 1 }}</span>
-              <button (click)="removeCertification(cIdx)" class="text-rose-500 hover:underline">Remove</button>
+              <span class="font-bold text-slate-900 dark:text-white">#{{ eIndex + 1 }} {{ edu.degree }} at {{ edu.institution }}</span>
+              <button (click)="removeEducation(eIndex)" class="text-rose-500 hover:text-rose-600 font-semibold">Remove</button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label class="block font-medium mb-1">Title</label>
-                <input type="text" [(ngModel)]="cert.title" (ngModelChange)="onModelChange()" placeholder="e.g. AWS Certified Developer" class="w-full px-2.5 py-1 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                <label class="block font-medium mb-1">Institution Name</label>
+                <input type="text" [(ngModel)]="edu.institution" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
               </div>
               <div>
-                <label class="block font-medium mb-1">Issuer</label>
-                <input type="text" [(ngModel)]="cert.issuer" (ngModelChange)="onModelChange()" placeholder="e.g. Amazon Web Services" class="w-full px-2.5 py-1 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                <label class="block font-medium mb-1">Degree Title</label>
+                <input type="text" [(ngModel)]="edu.degree" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
               </div>
               <div>
-                <label class="block font-medium mb-1">Year / Date</label>
-                <input type="text" [(ngModel)]="cert.date" (ngModelChange)="onModelChange()" placeholder="e.g. 2023" class="w-full px-2.5 py-1 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                <label class="block font-medium mb-1">Field of Study</label>
+                <input type="text" [(ngModel)]="edu.fieldOfStudy" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label class="block font-medium mb-1">Location</label>
+                <input type="text" [(ngModel)]="edu.location" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label class="block font-medium mb-1">Start Year</label>
+                <input type="text" [(ngModel)]="edu.startDate" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label class="block font-medium mb-1">End Year</label>
+                <input type="text" [(ngModel)]="edu.endDate" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-semibold text-slate-900 dark:text-white">📜 Professional Certifications</h3>
+            <button (click)="addCertification()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+              + Add Certification
+            </button>
+          </div>
+
+          <div *ngFor="let cert of profile.certifications; let certIndex = index" class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 space-y-3 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 dark:text-white">#{{ certIndex + 1 }} {{ cert.title }}</span>
+              <button (click)="removeCertification(certIndex)" class="text-rose-500 hover:text-rose-600 font-semibold">Remove</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-medium mb-1">Certification Name</label>
+                <input type="text" [(ngModel)]="cert.title" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label class="block font-medium mb-1">Issuing Organization</label>
+                <input type="text" [(ngModel)]="cert.issuer" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label class="block font-medium mb-1">Issue Date / Year</label>
+                <input type="text" [(ngModel)]="cert.date" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- TAB 6: TEMPLATE & PAGE FORMATTING -->
-      <div *ngIf="activeTab === 'layout'" class="space-y-4 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
-        <h3 class="text-base font-semibold text-slate-900 dark:text-white">🎨 Template Style & 1-Page Layout Controls</h3>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div>
-            <label class="block font-semibold mb-2">Resume Template Theme</label>
-            <div class="grid grid-cols-2 gap-2">
-              <button 
-                *ngFor="let st of styles"
-                (click)="profile.templateStyle = st.id; onModelChange()"
-                [class.border-emerald-500]="profile.templateStyle === st.id"
-                [class.bg-emerald-50]="profile.templateStyle === st.id"
-                [class.dark:bg-emerald-950]="profile.templateStyle === st.id"
-                class="p-3 rounded-lg border border-slate-200 dark:border-slate-700 text-left transition-all hover:border-emerald-500"
-              >
-                <div class="font-bold text-slate-900 dark:text-white">{{ st.name }}</div>
-                <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">{{ st.desc }}</div>
-              </button>
+      <!-- TAB 6: AWARDS & HONORS (Phase 3 Requirement) -->
+      <div *ngIf="activeTab === 'awards'" class="space-y-4 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>🏆 Awards & Honors</span>
+            <span class="text-[10px] text-emerald-500 font-normal border border-emerald-500/30 px-2 py-0.5 rounded">Phase 3</span>
+          </h3>
+          <button (click)="addAward()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+            <span>+ Add Award</span>
+          </button>
+        </div>
+
+        <div *ngFor="let award of getAwards(); let aIndex = index" class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-900 dark:text-white">#{{ aIndex + 1 }} {{ award.title || 'New Award' }}</span>
+            <button (click)="removeAward(aIndex)" class="text-rose-500 hover:text-rose-600 font-semibold">Remove</button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="block font-medium mb-1">Award Title</label>
+              <input type="text" [(ngModel)]="award.title" (ngModelChange)="onModelChange()" placeholder="e.g. Best Innovation Award" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+              <label class="block font-medium mb-1">Issuing Organization</label>
+              <input type="text" [(ngModel)]="award.issuer" (ngModelChange)="onModelChange()" placeholder="e.g. SELISE / Hackathon" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+              <label class="block font-medium mb-1">Year / Date Received</label>
+              <input type="text" [(ngModel)]="award.date" (ngModelChange)="onModelChange()" placeholder="2024" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
             </div>
           </div>
 
-          <div class="space-y-4">
-            <div>
-              <label class="block font-semibold mb-1">Font Scaling (Fit to Page)</label>
-              <div class="flex gap-2">
-                <button (click)="profile.fontSize = 'sm'; onModelChange()" [class.bg-emerald-600]="profile.fontSize === 'sm'" [class.text-white]="profile.fontSize === 'sm'" class="px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 text-xs flex-1">Small (Compact)</button>
-                <button (click)="profile.fontSize = 'base'; onModelChange()" [class.bg-emerald-600]="profile.fontSize === 'base'" [class.text-white]="profile.fontSize === 'base'" class="px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 text-xs flex-1">Medium (Standard)</button>
-                <button (click)="profile.fontSize = 'lg'; onModelChange()" [class.bg-emerald-600]="profile.fontSize === 'lg'" [class.text-white]="profile.fontSize === 'lg'" class="px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 text-xs flex-1">Large</button>
-              </div>
-            </div>
+          <div>
+            <label class="block font-medium mb-1">Description / Key Highlights</label>
+            <input type="text" [(ngModel)]="award.description" (ngModelChange)="onModelChange()" placeholder="Awarded for building an autonomous AI agent..." class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+          </div>
+        </div>
+      </div>
 
+      <!-- TAB 7: EXTRA-CURRICULAR ACTIVITIES (Phase 3 Requirement) -->
+      <div *ngIf="activeTab === 'extracurricular'" class="space-y-4 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>🎨 Extra-Curricular Activities</span>
+            <span class="text-[10px] text-emerald-500 font-normal border border-emerald-500/30 px-2 py-0.5 rounded">Phase 3</span>
+          </h3>
+          <button (click)="addExtraCurricular()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+            <span>+ Add Activity</span>
+          </button>
+        </div>
+
+        <div *ngFor="let extra of getExtraCurriculars(); let exIndex = index" class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-900 dark:text-white">#{{ exIndex + 1 }} {{ extra.role }} at {{ extra.organization }}</span>
+            <button (click)="removeExtraCurricular(exIndex)" class="text-rose-500 hover:text-rose-600 font-semibold">Remove</button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label class="block font-semibold mb-1">Section Spacing</label>
-              <div class="flex gap-2">
-                <button (click)="profile.spacing = 'compact'; onModelChange()" [class.bg-emerald-600]="profile.spacing === 'compact'" [class.text-white]="profile.spacing === 'compact'" class="px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 text-xs flex-1">Tight</button>
-                <button (click)="profile.spacing = 'normal'; onModelChange()" [class.bg-emerald-600]="profile.spacing === 'normal'" [class.text-white]="profile.spacing === 'normal'" class="px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 text-xs flex-1">Normal</button>
-                <button (click)="profile.spacing = 'relaxed'; onModelChange()" [class.bg-emerald-600]="profile.spacing === 'relaxed'" [class.text-white]="profile.spacing === 'relaxed'" class="px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 text-xs flex-1">Relaxed</button>
-              </div>
+              <label class="block font-medium mb-1">Organization / Club Name</label>
+              <input type="text" [(ngModel)]="extra.organization" (ngModelChange)="onModelChange()" placeholder="e.g. University Tech Club" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
             </div>
+            <div>
+              <label class="block font-medium mb-1">Role / Position</label>
+              <input type="text" [(ngModel)]="extra.role" (ngModelChange)="onModelChange()" placeholder="e.g. Lead Organizer / Mentor" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+              <label class="block font-medium mb-1">Start Date</label>
+              <input type="text" [(ngModel)]="extra.startDate" (ngModelChange)="onModelChange()" placeholder="2021" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+              <label class="block font-medium mb-1">End Date</label>
+              <input type="text" [(ngModel)]="extra.endDate" (ngModelChange)="onModelChange()" placeholder="2023" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1">Description & Key Contributions</label>
+            <input type="text" [(ngModel)]="extra.description" (ngModelChange)="onModelChange()" placeholder="Organized technical hackathons and mentored students..." class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 8: LANGUAGES -->
+      <div *ngIf="activeTab === 'languages'" class="space-y-4 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white">🌐 Spoken Languages & Proficiency</h3>
+          <button (click)="addLanguage()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+            + Add Language
+          </button>
+        </div>
+
+        <div *ngFor="let lang of getLanguages(); let lIndex = index" class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-900 dark:text-white">#{{ lIndex + 1 }} {{ lang.name }} ({{ lang.proficiency }}%)</span>
+            <button (click)="removeLanguage(lIndex)" class="text-rose-500 hover:text-rose-600 font-semibold">Remove</button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-medium mb-1">Language Name</label>
+              <input type="text" [(ngModel)]="lang.name" (ngModelChange)="onModelChange()" placeholder="English" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+              <label class="block font-medium mb-1">Proficiency Level (10-100%)</label>
+              <input type="number" min="10" max="100" [(ngModel)]="lang.proficiency" (ngModelChange)="onModelChange()" class="w-full px-3 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 9: 1-PAGE STYLING -->
+      <div *ngIf="activeTab === 'layout'" class="space-y-4 bg-white dark:bg-slate-800/40 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60">
+        <h3 class="text-base font-semibold text-slate-900 dark:text-white">🎨 1-Page Layout & Font Scaling Controls</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div>
+            <label class="block font-medium mb-1">Template Style</label>
+            <select [(ngModel)]="profile.templateStyle" (ngModelChange)="onModelChange()" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white outline-none">
+              <option value="modern">Executive Navy Two-Column (Matching Design)</option>
+              <option value="minimal">Minimalist Clean</option>
+              <option value="executive">Executive Classic</option>
+              <option value="compact">Compact Tech Specialist</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1">Font Scaling (A4 Fit)</label>
+            <select [(ngModel)]="profile.fontSize" (ngModelChange)="onModelChange()" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white outline-none">
+              <option value="sm">Small (Fits dense experience)</option>
+              <option value="base">Standard (Balanced)</option>
+              <option value="lg">Large (Fits concise profiles)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1">Vertical Spacing (A4 Fit)</label>
+            <select [(ngModel)]="profile.spacing" (ngModelChange)="onModelChange()" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white outline-none">
+              <option value="compact">Compact Gap</option>
+              <option value="normal">Standard Gap</option>
+              <option value="relaxed">Relaxed Gap</option>
+            </select>
           </div>
         </div>
       </div>
@@ -348,19 +473,15 @@ export class CvEditorComponent {
     { id: 'personal', label: 'Personal & Photo', icon: '👤' },
     { id: 'experience', label: 'Experience', icon: '💼' },
     { id: 'projects', label: 'Key Projects', icon: '🚀' },
-    { id: 'skills', label: 'Skills', icon: '🛠️' },
+    { id: 'skills', label: 'Skills', icon: '📌' },
     { id: 'education', label: 'Education & Certs', icon: '🎓' },
-    { id: 'layout', label: '1-Page Styling', icon: '🎨' }
+    { id: 'awards', label: 'Awards & Honors', icon: '🏆' },
+    { id: 'extracurricular', label: 'Extra-Curricular', icon: '🎨' },
+    { id: 'languages', label: 'Languages', icon: '🌐' },
+    { id: 'layout', label: '1-Page Styling', icon: '📐' }
   ];
 
-  styles: { id: CvTemplateStyle; name: string; desc: string }[] = [
-    { id: 'modern', name: 'Modern Split', desc: 'Clean 2-column with emerald accents' },
-    { id: 'minimal', name: 'Minimalist', desc: 'Elegant single column serif header' },
-    { id: 'executive', name: 'Executive', desc: 'Dark banner with prominent headshot' },
-    { id: 'compact', name: 'Compact Tech', desc: 'Dense monospaced developer layout' }
-  ];
-
-  trackByIndex(index: number): number {
+  trackByIndex(index: number, obj: any): any {
     return index;
   }
 
@@ -371,13 +492,12 @@ export class CvEditorComponent {
   }
 
   onPhotoSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0] && this.profile) {
-      const file = input.files[0];
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file && this.profile) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        if (this.profile && e.target?.result) {
-          this.profile.personalInfo.avatarUrl = e.target.result as string;
+      reader.onload = () => {
+        if (this.profile) {
+          this.profile.personalInfo.avatarUrl = reader.result as string;
           this.onModelChange();
         }
       };
@@ -396,13 +516,13 @@ export class CvEditorComponent {
     if (!this.profile) return;
     this.profile.experiences.push({
       id: 'exp-' + Date.now(),
-      company: 'Company Name',
-      role: 'Role Title',
+      company: 'New Company',
+      role: 'Software Engineer',
       location: 'Location',
-      startDate: '2023',
+      startDate: '2023-01',
       endDate: 'Present',
       isCurrent: true,
-      bulletPoints: ['Accomplished key task using technology X.']
+      bulletPoints: ['Architected key software modules.', 'Delivered production features.']
     });
     this.onModelChange();
   }
@@ -413,40 +533,36 @@ export class CvEditorComponent {
     this.onModelChange();
   }
 
-  addBullet(exp: WorkExperience) {
-    exp.bulletPoints.push('New key accomplishment or responsibility.');
+  addBulletPoint(exp: WorkExperience) {
+    exp.bulletPoints.push('New responsibility or achievement');
     this.onModelChange();
   }
 
-  removeBullet(exp: WorkExperience, index: number) {
-    exp.bulletPoints.splice(index, 1);
+  removeBulletPoint(exp: WorkExperience, bIndex: number) {
+    exp.bulletPoints.splice(bIndex, 1);
     this.onModelChange();
   }
 
   addProject() {
     if (!this.profile) return;
-    if (!this.profile.projects) {
-      this.profile.projects = [];
-    }
     this.profile.projects.push({
       id: 'proj-' + Date.now(),
       title: 'New Key Project',
-      description: 'Key project description and technical achievements.',
-      role: 'Lead Architect',
-      link: '',
-      techStack: ['TypeScript', 'Angular']
+      description: 'Built a high performance web system.',
+      link: 'https://github.com/...',
+      techStack: ['Angular', 'TypeScript']
     });
     this.onModelChange();
   }
 
   removeProject(index: number) {
-    if (!this.profile || !this.profile.projects) return;
+    if (!this.profile) return;
     this.profile.projects.splice(index, 1);
     this.onModelChange();
   }
 
-  addTechStackTag(proj: Project, techStr: string) {
-    const trimmed = techStr.trim();
+  addTechStackTag(proj: Project, tagStr: string) {
+    const trimmed = tagStr.trim();
     if (trimmed && !proj.techStack.includes(trimmed)) {
       proj.techStack.push(trimmed);
       this.onModelChange();
@@ -524,6 +640,97 @@ export class CvEditorComponent {
   removeCertification(index: number) {
     if (!this.profile || !this.profile.certifications) return;
     this.profile.certifications.splice(index, 1);
+    this.onModelChange();
+  }
+
+  getAwards(): Award[] {
+    if (!this.profile) return [];
+    if (!this.profile.awards) {
+      this.profile.awards = [];
+    }
+    return this.profile.awards;
+  }
+
+  addAward() {
+    if (!this.profile) return;
+    if (!this.profile.awards) {
+      this.profile.awards = [];
+    }
+    this.profile.awards.push({
+      id: 'award-' + Date.now(),
+      title: 'New Award / Honor',
+      issuer: 'Issuing Body',
+      date: '2024',
+      description: 'Award description'
+    });
+    this.onModelChange();
+  }
+
+  removeAward(index: number) {
+    if (!this.profile || !this.profile.awards) return;
+    this.profile.awards.splice(index, 1);
+    this.onModelChange();
+  }
+
+  getExtraCurriculars(): ExtraCurricular[] {
+    if (!this.profile) return [];
+    if (!this.profile.extraCurriculars) {
+      this.profile.extraCurriculars = [];
+    }
+    return this.profile.extraCurriculars;
+  }
+
+  addExtraCurricular() {
+    if (!this.profile) return;
+    if (!this.profile.extraCurriculars) {
+      this.profile.extraCurriculars = [];
+    }
+    this.profile.extraCurriculars.push({
+      id: 'extra-' + Date.now(),
+      organization: 'Organization Name',
+      role: 'Role / Member',
+      startDate: '2021',
+      endDate: '2023',
+      description: 'Activity details'
+    });
+    this.onModelChange();
+  }
+
+  removeExtraCurricular(index: number) {
+    if (!this.profile || !this.profile.extraCurriculars) return;
+    this.profile.extraCurriculars.splice(index, 1);
+    this.onModelChange();
+  }
+
+  getLanguages(): Language[] {
+    if (!this.profile) return [];
+    if (!this.profile.languages) {
+      this.profile.languages = [
+        { id: 'l1', name: 'English', proficiency: 90 },
+        { id: 'l2', name: 'Bengali', proficiency: 100 },
+        { id: 'l3', name: 'German', proficiency: 65 },
+        { id: 'l4', name: 'Hindi', proficiency: 80 }
+      ];
+    }
+    return this.profile.languages;
+  }
+
+  addLanguage() {
+    if (!this.profile) return;
+    if (!this.profile.languages) {
+      this.profile.languages = [];
+    }
+    this.profile.languages.push({
+      id: 'lang-' + Date.now(),
+      name: 'New Language',
+      proficiency: 80
+    });
+    this.onModelChange();
+  }
+
+  removeLanguage(index: number) {
+    if (!this.profile || !this.profile.languages) return;
+    this.profile.languages.splice(index, 1);
     this.onModelChange();
   }
 }

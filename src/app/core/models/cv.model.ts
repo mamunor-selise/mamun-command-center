@@ -9,6 +9,7 @@ export interface PersonalInfo {
   linkedin?: string;
   avatarUrl?: string; // Base64 data URL or image URL
   summary: string;
+  careerObjective?: string;
 }
 
 export interface WorkExperience {
@@ -30,6 +31,7 @@ export interface Education {
   location: string;
   startDate: string;
   endDate: string;
+  cgpa?: string; // e.g. "CGPA: 3.68 out of 4.00"
 }
 
 export interface SkillCategory {
@@ -45,6 +47,7 @@ export interface Project {
   role?: string;
   link?: string;
   techStack: string[];
+  bulletPoints?: string[];
 }
 
 export interface Certification {
@@ -55,20 +58,46 @@ export interface Certification {
   credentialUrl?: string;
 }
 
+export interface Award {
+  id: string;
+  title: string;
+  issuer: string;
+  date: string;
+  description?: string;
+}
+
+export interface ExtraCurricular {
+  id: string;
+  organization: string;
+  role: string;
+  startDate: string;
+  endDate: string;
+  description?: string;
+}
+
+export interface Language {
+  id: string;
+  name: string;
+  proficiency: number; // 0 to 100 percentage bar
+}
+
 export type CvTemplateStyle = 'modern' | 'minimal' | 'executive' | 'compact';
 
 export interface CvProfile {
   id: string;
-  title: string; // e.g., "Full-stack Engineer Profile", "AI Specialist Profile"
+  title: string;
   targetRole: string;
   templateStyle: CvTemplateStyle;
-  fontSize: 'sm' | 'base' | 'lg'; // Font scaling for 1-page fit
-  spacing: 'compact' | 'normal' | 'relaxed'; // Vertical spacing for 1-page fit
+  fontSize: 'sm' | 'base' | 'lg';
+  spacing: 'compact' | 'normal' | 'relaxed';
   personalInfo: PersonalInfo;
   experiences: WorkExperience[];
   education: Education[];
   skillCategories: SkillCategory[];
   projects: Project[];
   certifications: Certification[];
+  awards?: Award[];
+  extraCurriculars?: ExtraCurricular[];
+  languages?: Language[];
   updatedAt: string;
 }
