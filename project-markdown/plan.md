@@ -50,7 +50,10 @@ erDiagram
     QUESTION ||--o{ QUIZ_ATTEMPT_DETAIL : evaluated_in
     CHAT_SESSION ||--o{ CHAT_MESSAGE : stores
 ```
+## Database
+Database connection string - mongodb+srv://mamunorselise:Z3xxMP1KoVJIODlu@cluster0.e6whmmx.mongodb.net/?appName=Cluster0
 
+Database Name - AE3EEEDC-E790-4CDB-96D5-2DD31F26C9CC
 ---
 
 ## 🗓️ Implementation Roadmap

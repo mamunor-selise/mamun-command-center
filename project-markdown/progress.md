@@ -59,6 +59,7 @@
 | 2026-08-21 | Navigation & Chatbot Widget (MCC-2) | ✅ Completed | Added top Navigation menu bar, module route views, and bottom-right floating Chatbot widget. |
 | 2026-08-21 | Dark & Light Mode Theme Switcher (MCC-3) | ✅ Completed | Implemented `ThemeService` with local storage persistence and `ThemeToggleComponent`. |
 | 2026-08-21 | CV Management Module (MCC-4) | ✅ Completed | Implemented CV Variant CRUD, 1-page A4 preview, 4 layout themes, photo upload, AI assistant, and PDF export pipeline. |
+| 2026-08-21 | Authentication & Next.js Backend (MCC-5) | ✅ Completed | Built Next.js serverless API auth (`/api/auth/signup`, `/api/auth/signin`, `/api/auth/me`), password hashing, token validation, persistent DB helper (`api/_db.js`), and Angular `AuthService` with `AuthModalComponent`. |
 
 ---
 

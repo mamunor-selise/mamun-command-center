@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { PLATFORM_ID } from '@angular/core';
 import { LayoutService } from '../../../core/services/layout.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 export interface NavItem {
   label: string;
@@ -109,15 +110,15 @@ export interface NavItem {
         <div class="flex items-center gap-3" [class.justify-center]="layoutService.isCollapsed() && !layoutService.isMobileOpen()">
           <div class="relative shrink-0">
             <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-xs shadow-md">
-              MR
+              {{ authService.currentUser()?.name?.charAt(0) || 'MR' }}
             </div>
             <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-slate-950 rounded-full"></span>
           </div>
 
           @if (!layoutService.isCollapsed() || layoutService.isMobileOpen()) {
             <div class="truncate min-w-0 flex-1">
-              <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">Mamun</p>
-              <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Online • Command Suite</p>
+              <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">{{ authService.currentUser()?.name || 'Mamun' }}</p>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">{{ authService.isAuthenticated() ? 'Authenticated • Next.js BE' : 'Guest Mode' }}</p>
             </div>
 
             <button
@@ -138,6 +139,7 @@ export interface NavItem {
 })
 export class SidebarComponent {
   layoutService = inject(LayoutService);
+  authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
 
   navItems: NavItem[] = [

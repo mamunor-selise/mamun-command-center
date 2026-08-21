@@ -3,12 +3,15 @@ import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { LayoutService } from '../../../core/services/layout.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
+import { AuthModalComponent } from '../auth-modal/auth-modal.component';
+import { LogoutModalComponent } from '../logout-modal/logout-modal.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, ThemeToggleComponent],
+  imports: [CommonModule, ThemeToggleComponent, AuthModalComponent, LogoutModalComponent],
   template: `
     <header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md sticky top-0 z-30 px-4 md:px-8 flex items-center justify-between transition-colors print:hidden">
       <div class="flex items-center gap-3">
@@ -63,17 +66,52 @@ import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
       <!-- Right Header Actions -->
       <div class="flex items-center gap-3">
+        <!-- Auth User Profile / Log Out Button -->
+        <div *ngIf="authService.isAuthenticated()" class="flex items-center gap-3 text-xs bg-slate-100 dark:bg-slate-900/80 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
+          <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center shadow-sm text-xs">
+            {{ authService.currentUser()?.name?.charAt(0) || '👤' }}
+          </div>
+          <div class="hidden sm:block text-left">
+            <div class="font-semibold text-slate-900 dark:text-white leading-none">{{ authService.currentUser()?.name }}</div>
+            <div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">MongoDB Atlas • Online</div>
+          </div>
+          <button 
+            (click)="isLogoutModalOpen = true" 
+            title="Log Out Session" 
+            class="px-2.5 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1"
+          >
+            <span>🚪 Log Out</span>
+          </button>
+        </div>
+
+        <button 
+          *ngIf="!authService.isAuthenticated()" 
+          (click)="isAuthModalOpen = true" 
+          class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5"
+        >
+          <span>🔑 Sign In / Register</span>
+        </button>
+
         <app-theme-toggle />
       </div>
     </header>
+
+    <!-- Auth Modal -->
+    <app-auth-modal [isOpen]="isAuthModalOpen" (close)="isAuthModalOpen = false"></app-auth-modal>
+
+    <!-- Logout Confirmation Modal -->
+    <app-logout-modal [isOpen]="isLogoutModalOpen" (close)="isLogoutModalOpen = false"></app-logout-modal>
   `
 })
 export class HeaderComponent {
   layoutService = inject(LayoutService);
+  authService = inject(AuthService);
   private router = inject(Router);
 
   currentPageTitle = signal<string>('Dashboard');
   currentPageIcon = signal<string>('🏠');
+  isAuthModalOpen = false;
+  isLogoutModalOpen = false;
 
   constructor() {
     this.updateTitle(this.router.url);
