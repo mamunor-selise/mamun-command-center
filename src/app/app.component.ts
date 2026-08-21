@@ -24,7 +24,7 @@ import { ChatbotWidgetComponent } from './shared/components/chatbot-widget/chatb
         </main>
 
         <!-- Page Footer -->
-        <footer class="border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950 px-6 py-4 text-center text-xs text-slate-500 transition-colors">
+        <footer class="border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950 px-6 py-4 text-center text-xs text-slate-500 transition-colors print:hidden">
           Mamun Command Center • Dark & Light Mode Theme Support (MCC-3)
         </footer>
       </div>

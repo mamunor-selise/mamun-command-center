@@ -27,7 +27,7 @@ export interface NavItem {
 
     <!-- Left Sidebar Panel -->
     <aside
-      class="fixed md:sticky top-0 left-0 bottom-0 h-screen z-50 md:z-20 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-all duration-300 ease-in-out shrink-0 select-none shadow-xl md:shadow-none"
+      class="fixed md:sticky top-0 left-0 bottom-0 h-screen z-50 md:z-20 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-all duration-300 ease-in-out shrink-0 select-none shadow-xl md:shadow-none print:hidden"
       [class.w-64]="!layoutService.isCollapsed()"
       [class.w-20]="layoutService.isCollapsed()"
       [class.translate-x-0]="layoutService.isMobileOpen()"

@@ -10,7 +10,7 @@ import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
   standalone: true,
   imports: [CommonModule, ThemeToggleComponent],
   template: `
-    <header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md sticky top-0 z-30 px-4 md:px-8 flex items-center justify-between transition-colors">
+    <header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md sticky top-0 z-30 px-4 md:px-8 flex items-center justify-between transition-colors print:hidden">
       <div class="flex items-center gap-3">
         <!-- Mobile Menu Hamburger Button -->
         <button

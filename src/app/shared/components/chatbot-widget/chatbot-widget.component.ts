@@ -9,7 +9,7 @@ import { ChatbotService, ChatMessage } from '../../../core/services/chatbot.serv
   imports: [CommonModule, FormsModule],
   template: `
     <!-- Floating Chatbot Container - Bottom Right Side -->
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end select-none">
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end select-none print:hidden">
       <!-- Chat Window Drawer -->
       @if (isOpen()) {
         <div class="w-80 sm:w-96 h-[520px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden mb-4 animate-in fade-in slide-in-from-bottom-4 duration-200 transition-colors">
