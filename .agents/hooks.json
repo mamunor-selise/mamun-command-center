@@ -1,0 +1,24 @@
+{
+  "test-hook": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/test-hook.js",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "node scripts/test-hook.js",
+        "timeout": 15
+      }
+    ]
+  }
+}

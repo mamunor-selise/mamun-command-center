@@ -10,6 +10,7 @@ import vaultHandler from './api/vault.js';
 
 import aiTrendsHandler from './api/ai-trends.js';
 import queryBuilderHandler from './api/query-builder.js';
+import quizHandler from './api/quiz.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -79,6 +80,8 @@ const server = http.createServer(async (req, res) => {
         await aiTrendsHandler(req, res);
       } else if (pathname === '/api/query-builder') {
         await queryBuilderHandler(req, res);
+      } else if (pathname === '/api/quiz') {
+        await quizHandler(req, res);
       } else {
         res.status(404).json({ error: { message: `Route ${pathname} not found on API server.` } });
       }
