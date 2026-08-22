@@ -43,7 +43,7 @@ import { AiTrendsService, AiBuzzword, TrendingAiTool, StoreAiTool } from '../../
         </div>
       }
 
-      <!-- THREE VERTICAL CARDS CONTAINER (Top Card = Buzzword this week) -->
+      <!-- THREE VERTICAL SECTIONS CONTAINER (Top Card = Buzzword this week) -->
       <div class="flex flex-col space-y-6">
         
         <!-- CARD 1 (TOP CARD): 🔥 BUZZWORD THIS WEEK -->
@@ -68,31 +68,30 @@ import { AiTrendsService, AiBuzzword, TrendingAiTool, StoreAiTool } from '../../
             </span>
           </div>
 
-          <!-- Buzzword Scrollable List (Compact Cards) -->
-          <div class="mt-3 max-h-60 overflow-y-auto pr-1 space-y-2 custom-scrollbar">
+          <!-- Buzzword Scrollable Clean List -->
+          <div class="mt-2 max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
             @for (bw of aiTrendsService.buzzwords(); track bw.id) {
               <div
                 (click)="selectedBuzzword.set(bw)"
-                class="group bg-slate-50 dark:bg-slate-900/50 hover:bg-purple-500/10 border border-slate-200 dark:border-slate-700/50 hover:border-purple-500/40 rounded-xl p-3 transition-all duration-150 cursor-pointer"
+                class="group py-2.5 px-2 hover:bg-purple-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
               >
-                <div class="flex items-center justify-between">
-                  <span class="px-2 py-0.5 text-[9px] font-semibold rounded bg-purple-500/15 text-purple-600 dark:text-purple-300 border border-purple-500/20">
-                    {{ bw.category }}
-                  </span>
+                <div class="flex items-center space-x-2.5 overflow-hidden">
+                  <span class="text-xs font-bold text-amber-500 flex-shrink-0">🔥</span>
+                  <div class="truncate">
+                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
+                      {{ bw.title }}
+                    </h4>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                      {{ bw.category }} • "{{ bw.tagline }}"
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-center space-x-1.5 flex-shrink-0 ml-2">
                   <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400">
                     📈 {{ bw.trendScore }}
                   </span>
-                </div>
-
-                <h4 class="text-xs font-bold text-slate-900 dark:text-white mt-1.5 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
-                  {{ bw.title }}
-                </h4>
-                <p class="text-[10px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 truncate">
-                  "{{ bw.tagline }}"
-                </p>
-
-                <div class="mt-2 flex items-center justify-end text-[10px] font-semibold text-purple-600 dark:text-purple-400">
-                  <span>View Details →</span>
+                  <span class="text-xs text-purple-600 dark:text-purple-400 font-bold">→</span>
                 </div>
               </div>
             }
@@ -108,7 +107,7 @@ import { AiTrendsService, AiBuzzword, TrendingAiTool, StoreAiTool } from '../../
               </div>
               <div>
                 <h3 class="text-xs font-bold text-slate-900 dark:text-white">Trending AI Tools</h3>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400">Click card for details & link ↗</p>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400">Click item to view & launch ↗</p>
               </div>
             </div>
             <span class="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded">
@@ -116,35 +115,31 @@ import { AiTrendsService, AiBuzzword, TrendingAiTool, StoreAiTool } from '../../
             </span>
           </div>
 
-          <!-- Tools Scrollable List (Compact Cards) -->
-          <div class="mt-3 max-h-60 overflow-y-auto pr-1 space-y-2 custom-scrollbar">
+          <!-- Tools Scrollable Clean List -->
+          <div class="mt-2 max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
             @for (tool of aiTrendsService.trendingTools(); track tool.id) {
               <div
                 (click)="selectedTrendingTool.set(tool)"
-                class="group bg-slate-50 dark:bg-slate-900/60 hover:bg-indigo-500/10 border border-slate-200 dark:border-slate-700/60 hover:border-indigo-500/40 rounded-xl p-3 transition-all duration-150 cursor-pointer"
+                class="group py-2.5 px-2 hover:bg-indigo-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
               >
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center space-x-2">
-                    <span class="text-lg">{{ tool.icon }}</span>
-                    <div>
-                      <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                        {{ tool.name }}
-                      </h4>
-                      <span class="text-[9px] font-medium text-indigo-600 dark:text-indigo-400 uppercase">
-                        #{{ tool.trendingRank }} Trending • {{ tool.category }}
-                      </span>
-                    </div>
+                <div class="flex items-center space-x-2.5 overflow-hidden">
+                  <span class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 w-5 flex-shrink-0 text-center">#{{ tool.trendingRank }}</span>
+                  <span class="text-base flex-shrink-0">{{ tool.icon }}</span>
+                  <div class="truncate">
+                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      {{ tool.name }}
+                    </h4>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400">
+                      {{ tool.category }} • ⭐ {{ tool.rating }}
+                    </span>
                   </div>
-                  <span class="px-2 py-0.5 text-[9px] font-medium rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
-                    {{ tool.pricing }}
-                  </span>
                 </div>
 
-                <div class="mt-2 flex items-center justify-between text-[10px]">
-                  <span class="text-slate-400">⭐ {{ tool.rating }}</span>
-                  <span class="font-semibold text-indigo-600 dark:text-indigo-400 group-hover:translate-x-0.5 transition-transform">
-                    Inspect & Launch ↗
+                <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+                  <span class="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                    {{ tool.pricing }}
                   </span>
+                  <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400">↗</span>
                 </div>
               </div>
             }
@@ -205,32 +200,30 @@ import { AiTrendsService, AiBuzzword, TrendingAiTool, StoreAiTool } from '../../
             </div>
           </div>
 
-          <!-- Store Scrollable List (Compact Cards) -->
-          <div class="mt-3 max-h-64 overflow-y-auto pr-1 space-y-2 custom-scrollbar">
+          <!-- Store Scrollable Clean List -->
+          <div class="mt-2 max-h-64 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
             @for (tool of aiTrendsService.filteredStoreTools(); track tool.id) {
               <div
                 (click)="selectedStoreTool.set(tool)"
-                class="group bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700/50 hover:border-emerald-500/40 rounded-xl p-2.5 transition-all cursor-pointer flex items-center justify-between"
+                class="group py-2 px-2 hover:bg-emerald-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
               >
                 <div class="flex items-center space-x-2.5 overflow-hidden">
-                  <span class="text-lg flex-shrink-0">{{ tool.icon }}</span>
+                  <span class="text-base flex-shrink-0">{{ tool.icon }}</span>
                   <div class="truncate">
-                    <h4 class="text-xs font-bold text-slate-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                       {{ tool.name }}
                     </h4>
-                    <span class="text-[9px] text-slate-500 dark:text-slate-400">
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400">
                       {{ tool.category }} • ⭐ {{ tool.rating }}
                     </span>
                   </div>
                 </div>
 
-                <div class="flex items-center space-x-2 flex-shrink-0">
-                  <span class="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+                  <span class="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                     {{ tool.pricing }}
                   </span>
-                  <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                    ↗
-                  </span>
+                  <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">↗</span>
                 </div>
               </div>
             } @empty {

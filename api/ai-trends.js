@@ -51,6 +51,106 @@ export const defaultAiTrendsData = {
       trendScore: '89%',
       whyItMatters: 'Eliminates hallucinations by grounding responses in exact documentation and structural data.',
       keyTakeaway: 'Enterprise AI relies heavily on rich, multimodal retrieval accuracy.'
+    },
+    {
+      id: 'bw-6',
+      title: 'Test-Time Compute Scaling',
+      tagline: 'Allocating additional inference budget to achieve higher accuracy',
+      description: 'The breakthrough technique where LLMs generate multiple candidate solution paths, evaluate intermediate steps, and verify proofs dynamically during generation.',
+      category: 'Inference Scaling',
+      trendScore: '94%',
+      whyItMatters: 'Allows smaller models to outperform giant models simply by thinking longer during response generation.',
+      keyTakeaway: 'Inference latency can be traded for superior problem-solving quality.'
+    },
+    {
+      id: 'bw-7',
+      title: 'Speculative Decoding & Model Distillation',
+      tagline: 'Accelerating LLM token output speeds by using draft models',
+      description: 'Using small, ultra-fast draft models to propose token sequences that a larger target LLM verifies in parallel, yielding 2x-3x faster response speeds.',
+      category: 'Performance & Speed',
+      trendScore: '91%',
+      whyItMatters: 'Dramatically reduces user waiting time for long code completions and streaming chats.',
+      keyTakeaway: 'Fast speculative drafting combined with large model verification is becoming standard.'
+    },
+    {
+      id: 'bw-8',
+      title: 'Context Window Expansion & Needle in a Haystack',
+      tagline: 'Processing millions of tokens of context with high retrieval precision',
+      description: 'Models expanding context windows up to 2 Million tokens (e.g. Gemini 1.5 Pro, Claude 3.7) while maintaining 99%+ accuracy in retrieving specific facts hidden deep inside huge documents.',
+      category: 'LLM Memory',
+      trendScore: '88%',
+      whyItMatters: 'Enables analyzing entire code repositories or multi-hundred page technical specifications in a single prompt.',
+      keyTakeaway: 'Large context windows transform how technical documentation is ingested.'
+    },
+    {
+      id: 'bw-9',
+      title: 'AI Code Review & Automated PR Agents',
+      tagline: 'Autonomous GitHub bots catching bugs and writing regression tests',
+      description: 'AI agents embedded into CI/CD pipelines that inspect incoming git pull requests, verify unit test coverage, flag security vulnerabilities, and propose code fixes directly.',
+      category: 'DevOps & Automation',
+      trendScore: '93%',
+      whyItMatters: 'Improves code quality standards and speeds up code review turnaround times for engineering teams.',
+      keyTakeaway: 'Code review becomes an interactive dialogue between human devs and AI reviewers.'
+    },
+    {
+      id: 'bw-10',
+      title: 'Structured Outputs & Function Calling',
+      tagline: 'Guaranteeing strict JSON schema compliance from LLM completions',
+      description: 'Constraining LLM token sampling at the decoding layer to strictly adhere to Pydantic, Zod, or JSON Schemas, ensuring 100% reliable program parsing.',
+      category: 'API & Tool Use',
+      trendScore: '90%',
+      whyItMatters: 'Eliminates JSON syntax errors when integrating LLM output into backend code databases.',
+      keyTakeaway: 'Deterministic JSON mode turns natural language into type-safe APIs.'
+    },
+    {
+      id: 'bw-11',
+      title: 'Local LLMs & On-Device AI (Ollama / WebGPU)',
+      tagline: 'Running open-weights models locally without cloud server costs or leaks',
+      description: 'Utilizing quantization tools like Ollama, llama.cpp, and WebGPU to run 7B-70B models directly on Mac Silicon or local GPUs with complete data privacy.',
+      category: 'Edge AI & Privacy',
+      trendScore: '87%',
+      whyItMatters: 'Protects sensitive enterprise IP and enables offline zero-latency AI execution.',
+      keyTakeaway: 'Privacy-sensitive applications are migrating to local or hybrid model routing.'
+    },
+    {
+      id: 'bw-12',
+      title: 'Synthetic Data Generation & Self-Correction',
+      tagline: 'Models creating and filtering high-quality training datasets for themselves',
+      description: 'Using frontier models to generate millions of synthetic reasoning traces, test cases, and code samples, followed by automated verification to train specialized downstream models.',
+      category: 'Model Training',
+      trendScore: '86%',
+      whyItMatters: 'Bypasses human data collection bottlenecks and reduces model training costs.',
+      keyTakeaway: 'Quality synthetic data is becoming the primary fuel for next-gen models.'
+    },
+    {
+      id: 'bw-13',
+      title: 'Guardrails & Real-Time Alignment Tuning',
+      tagline: 'Enforcing safety, privacy, and policy rules on LLM streaming outputs',
+      description: 'Input/output filter layers (e.g. NeMo Guardrails, Llama Guard) that block prompt injections, PII leaks, and non-compliant responses in real time.',
+      category: 'AI Safety & Trust',
+      trendScore: '85%',
+      whyItMatters: 'Required for enterprise compliance, legal safety, and preventing malicious prompt injection attacks.',
+      keyTakeaway: 'Enterprise deployment requires strict real-time safety guardrails.'
+    },
+    {
+      id: 'bw-14',
+      title: 'Prompt Compression & Semantic Vector Caching',
+      tagline: 'Reusing cached LLM context tokens to slash API latency and cost',
+      description: 'Caching pre-computed prompt prefix KV tensors across requests so identical system prompts and context documents cost 50%-80% less and load instantly.',
+      category: 'Cost Optimization',
+      trendScore: '88%',
+      whyItMatters: 'Drastically reduces token bill expenses for high-volume conversational AI applications.',
+      keyTakeaway: 'Prompt caching makes long system instructions practically free.'
+    },
+    {
+      id: 'bw-15',
+      title: 'Zero-Shot & Few-Shot CoT Prompting',
+      tagline: 'Guiding models through step-by-step reasoning using structured exemplars',
+      description: 'Techniques like "Let\'s think step by step" combined with few-shot input-output examples that dramatically reduce reasoning errors on hard queries.',
+      category: 'Prompt Engineering',
+      trendScore: '90%',
+      whyItMatters: 'Improves model accuracy on complex logic by 40% without fine-tuning model weights.',
+      keyTakeaway: 'Providing structured reasoning examples is the most effective prompt technique.'
     }
   ],
 
@@ -347,11 +447,11 @@ export default async function handler(req, res) {
             messages: [
               {
                 role: 'system',
-                content: 'You are an expert AI industry analyst. Return JSON format with keys "buzzwords" (array of 5 items: id, title, tagline, description, category, trendScore, whyItMatters, keyTakeaway) and "trendingTools" (array of 6 items: id, name, category, description, url, pricing, trendingRank, icon, tags, rating).'
+                content: 'You are an expert AI industry analyst. Return JSON format with keys "buzzwords" (array of 15 items: id, title, tagline, description, category, trendScore, whyItMatters, keyTakeaway) and "trendingTools" (array of 6 items: id, name, category, description, url, pricing, trendingRank, icon, tags, rating).'
               },
               {
                 role: 'user',
-                content: 'Provide current weekly AI buzzwords and top trending AI tools for developer productivity, LLMs, and creative design in strict valid JSON.'
+                content: 'Provide 15 current weekly AI buzzwords and top trending AI tools for developer productivity, LLMs, and creative design in strict valid JSON.'
               }
             ]
           })
