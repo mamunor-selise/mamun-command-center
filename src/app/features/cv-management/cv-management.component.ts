@@ -246,6 +246,6 @@ export class CvManagementComponent {
   }
 
   exportPdf() {
-    window.print();
+    this.cvService.exportToPdf();
   }
 }

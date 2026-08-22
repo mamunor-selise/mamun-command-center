@@ -23,21 +23,21 @@ import { CvProfile } from '../../../../core/models/cv.model';
       <!-- A4 Printable Paper Canvas Container -->
       <div 
         id="cv-printable-page" 
-        class="cv-page shadow-2xl transition-all duration-200 bg-white text-slate-900 relative select-text flex flex-row overflow-hidden font-sans border border-slate-200"
+        class="cv-page shadow-2xl transition-all duration-200 bg-white text-slate-900 relative select-text flex flex-row overflow-hidden font-sans border border-slate-200 pt-6 px-5 pb-5"
         [ngClass]="[
           'spacing-' + (profile?.spacing || 'normal'),
           'font-size-' + (profile?.fontSize || 'base')
         ]"
-        style="width: 210mm; min-height: 297mm; max-height: 297mm; height: 297mm; box-sizing: border-box;"
+        style="width: 210mm; min-height: 297mm; max-height: 297mm; height: 297mm; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact;"
       >
         <!-- LEFT SIDEBAR: DUAL-TONE (NAVY HEADER + LIGHT OFF-WHITE BODY) (35% width) -->
-        <div class="w-[35%] bg-[#f0f4f8] text-[#081e36] flex flex-col justify-start relative z-10 shrink-0 border-r border-slate-300">
+        <div class="w-[35%] bg-[#f0f4f8] text-[#081e36] flex flex-col justify-start relative z-10 shrink-0 border-r border-slate-300 rounded-l-xl overflow-hidden" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
           
-          <!-- Top Dark Navy Profile Avatar Container with Curved Bottom Curve -->
-          <div class="bg-[#081e36] text-white pt-6 pb-10 px-4 flex flex-col items-center relative shadow-md" style="border-bottom-right-radius: 75px 45px;">
-            <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-2xl bg-slate-700 flex items-center justify-center shrink-0">
+          <!-- Top Profile Avatar Container (Navy Header Background under Profile with Curved Bottom Right) -->
+          <div class="bg-[#081e36] pt-6 pb-5 px-4 flex flex-col items-center relative shrink-0 rounded-br-[40px] shadow-sm" style="-webkit-print-color-adjust: exact; print-color-adjust: exact;">
+            <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-white/90 shadow-md bg-slate-200 flex items-center justify-center shrink-0">
               <img *ngIf="profile?.personalInfo?.avatarUrl" [src]="profile?.personalInfo?.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
-              <span *ngIf="!profile?.personalInfo?.avatarUrl" class="text-5xl text-white font-bold">
+              <span *ngIf="!profile?.personalInfo?.avatarUrl" class="text-5xl text-[#081e36] font-bold">
                 {{ profile?.personalInfo?.fullName?.charAt(0) || 'J' }}
               </span>
             </div>
@@ -140,7 +140,7 @@ import { CvProfile } from '../../../../core/models/cv.model';
         </div>
 
         <!-- RIGHT MAIN CONTENT COLUMN (65% width) -->
-        <div class="w-[65%] bg-white text-slate-900 p-6 flex flex-col justify-between overflow-hidden">
+        <div class="w-[65%] bg-white text-slate-900 pt-5 px-6 pb-5 flex flex-col justify-between overflow-hidden">
           <div>
             <!-- HEADER: NAME & TITLE -->
             <div class="mb-4">

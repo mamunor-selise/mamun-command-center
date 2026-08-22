@@ -9,6 +9,7 @@ import cvHandler from './api/cv.js';
 import vaultHandler from './api/vault.js';
 
 import aiTrendsHandler from './api/ai-trends.js';
+import queryBuilderHandler from './api/query-builder.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -76,6 +77,8 @@ const server = http.createServer(async (req, res) => {
         await vaultHandler(req, res);
       } else if (pathname === '/api/ai-trends') {
         await aiTrendsHandler(req, res);
+      } else if (pathname === '/api/query-builder') {
+        await queryBuilderHandler(req, res);
       } else {
         res.status(404).json({ error: { message: `Route ${pathname} not found on API server.` } });
       }

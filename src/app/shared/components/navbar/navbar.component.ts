@@ -54,6 +54,14 @@ import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
           >
             <span>🧪</span> Quiz Test Engine
           </a>
+
+          <a
+            routerLink="/query-builder"
+            routerLinkActive="bg-cyan-50 dark:bg-cyan-600/20 text-cyan-700 dark:text-cyan-300 font-semibold border border-cyan-200 dark:border-cyan-500/30"
+            class="px-4 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-all flex items-center gap-2"
+          >
+            <span>⚡</span> Query Builder
+          </a>
         </nav>
 
         <!-- Right Side Actions & Theme Toggle -->
@@ -75,6 +83,9 @@ import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
         </a>
         <a routerLink="/quiz-test" routerLinkActive="text-amber-600 dark:text-amber-400 font-bold" class="text-slate-600 dark:text-slate-400 flex flex-col items-center">
           <span>🧪</span> Quiz
+        </a>
+        <a routerLink="/query-builder" routerLinkActive="text-cyan-600 dark:text-cyan-400 font-bold" class="text-slate-600 dark:text-slate-400 flex flex-col items-center">
+          <span>⚡</span> Query Builder
         </a>
       </nav>
     </header>

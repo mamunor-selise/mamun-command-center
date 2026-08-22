@@ -38,6 +38,14 @@ export interface StoreAiTool {
   isFeatured?: boolean;
 }
 
+export interface TechQna {
+  id: string;
+  category: string;
+  question: string;
+  answer: string;
+  tags?: string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -45,6 +53,7 @@ export class AiTrendsService {
   private platformId = inject(PLATFORM_ID);
 
   buzzwords = signal<AiBuzzword[]>([]);
+  qnaItems = signal<TechQna[]>([]);
   trendingTools = signal<TrendingAiTool[]>([]);
   storeTools = signal<StoreAiTool[]>([]);
   
@@ -98,6 +107,7 @@ export class AiTrendsService {
       const result = await res.json();
       if (result.success && result.data) {
         this.buzzwords.set(result.data.buzzwords || []);
+        this.qnaItems.set(result.data.qnaItems || []);
         this.trendingTools.set(result.data.trendingTools || []);
         this.storeTools.set(result.data.storeTools || []);
       }
@@ -130,6 +140,7 @@ export class AiTrendsService {
       const result = await res.json();
       if (result.success && result.data) {
         if (result.data.buzzwords) this.buzzwords.set(result.data.buzzwords);
+        if (result.data.qnaItems) this.qnaItems.set(result.data.qnaItems);
         if (result.data.trendingTools) this.trendingTools.set(result.data.trendingTools);
         if (result.data.storeTools) this.storeTools.set(result.data.storeTools);
       }
@@ -318,6 +329,105 @@ export class AiTrendsService {
         whyItMatters: 'Improves model accuracy on complex logic by 40% without fine-tuning model weights.',
         keyTakeaway: 'Providing structured reasoning examples is the most effective prompt technique.'
       }
+    ]);
+
+    this.qnaItems.set([
+      { id: 'qna-1', category: 'Fundamentals', question: 'What does LLM stand for?', answer: 'Large Language Model' },
+      { id: 'qna-2', category: 'Fundamentals', question: 'What is the basic task of a language model?', answer: 'Predict the next token' },
+      { id: 'qna-3', category: 'Tokenization', question: 'What is a token?', answer: 'A unit of text processed by a language model' },
+      { id: 'qna-4', category: 'Tokenization', question: 'Why is text tokenized?', answer: 'To convert text into units that can be represented numerically' },
+      { id: 'qna-5', category: 'Tokenization', question: 'Are tokens always complete words?', answer: 'No' },
+      { id: 'qna-6', category: 'Vectors & Embeddings', question: 'What is an embedding?', answer: 'A numerical/vector representation of a token' },
+      { id: 'qna-7', category: 'Vectors & Embeddings', question: 'What is the purpose of an embedding space?', answer: 'To represent tokens as numerical vectors with meaningful relationships' },
+      { id: 'qna-8', category: 'Pretraining', question: 'What is the main objective of LLM pretraining?', answer: 'Next-token prediction' },
+      { id: 'qna-9', category: 'Generation', question: 'What does autoregressive generation mean?', answer: 'Generating each next token based on previously generated tokens' },
+      { id: 'qna-10', category: 'Architecture', question: 'What architecture is used by GPT-style models?', answer: 'Transformer' },
+      { id: 'qna-11', category: 'Architecture', question: 'What is the most important mechanism in a Transformer?', answer: 'Attention' },
+      { id: 'qna-12', category: 'Architecture', question: 'What does self-attention do?', answer: 'Allows tokens to interact with and attend to other tokens in the context' },
+      { id: 'qna-13', category: 'Architecture', question: 'Why is attention important?', answer: 'It allows the model to determine which parts of the context are relevant' },
+      { id: 'qna-14', category: 'Architecture', question: 'What is a Transformer block?', answer: 'A repeated neural-network unit containing components such as attention and feed-forward layers' },
+      { id: 'qna-15', category: 'Architecture', question: 'What is the purpose of positional information?', answer: 'To provide information about the order of tokens' },
+      { id: 'qna-16', category: 'Architecture', question: 'Why do Transformers need positional information?', answer: 'Attention alone does not inherently encode token order' },
+      { id: 'qna-17', category: 'LLM Memory', question: 'What is the context window?', answer: 'The maximum amount of token context the model can process at once' },
+      { id: 'qna-18', category: 'LLM Memory', question: 'What happens when the context window is exceeded?', answer: 'The model cannot directly attend to tokens outside the available context' },
+      { id: 'qna-19', category: 'Model Training', question: 'What is a parameter in an LLM?', answer: 'A learned numerical value/weight in the neural network' },
+      { id: 'qna-20', category: 'Model Training', question: 'What happens to parameters during training?', answer: 'They are adjusted to improve the model\'s predictions' },
+      { id: 'qna-21', category: 'Optimization', question: 'What is the loss function used for?', answer: 'Measuring how wrong the model\'s predictions are' },
+      { id: 'qna-22', category: 'Optimization', question: 'What does minimizing loss accomplish?', answer: 'It improves the model\'s predictions on the training objective' },
+      { id: 'qna-23', category: 'Optimization', question: 'What is gradient descent?', answer: 'An optimization method used to update model parameters' },
+      { id: 'qna-24', category: 'Optimization', question: 'What is backpropagation?', answer: 'The process of calculating gradients used to update model parameters' },
+      { id: 'qna-25', category: 'Training Lifecycle', question: 'What is pretraining?', answer: 'Training a model on a large amount of data to learn general language patterns and capabilities' },
+      { id: 'qna-26', category: 'Training Lifecycle', question: 'Why is massive training data useful?', answer: 'It exposes the model to a wide variety of language patterns and information' },
+      { id: 'qna-27', category: 'LLM Limitations', question: 'Does pretraining make an LLM perfectly knowledgeable?', answer: 'No' },
+      { id: 'qna-28', category: 'LLM Limitations', question: 'Does an LLM literally store a copy of every webpage in its parameters?', answer: 'No' },
+      { id: 'qna-29', category: 'Training Lifecycle', question: 'What does the model learn from training data?', answer: 'Statistical patterns and representations' },
+      { id: 'qna-30', category: 'Deep Learning', question: 'What is a neural network?', answer: 'A computational model composed of interconnected mathematical operations/parameters' },
+      { id: 'qna-31', category: 'Tokenization', question: 'What is an LLM\'s vocabulary?', answer: 'The set of tokens that the tokenizer can represent' },
+      { id: 'qna-32', category: 'Tokenization', question: 'What is tokenization?', answer: 'Converting raw text into tokens' },
+      { id: 'qna-33', category: 'Tokenization', question: 'What is detokenization?', answer: 'Converting tokens back into readable text' },
+      { id: 'qna-34', category: 'Tokenization', question: 'Why can tokenization affect model performance?', answer: 'Different tokenizations change how efficiently text is represented' },
+      { id: 'qna-35', category: 'Tokenization', question: 'What is a tokenizer?', answer: 'A system that converts text into tokens and tokens back into text' },
+      { id: 'qna-36', category: 'Execution', question: 'What is inference?', answer: 'Using a trained model to generate predictions/output' },
+      { id: 'qna-37', category: 'Execution', question: 'What is training?', answer: 'Adjusting model parameters using data and an optimization process' },
+      { id: 'qna-38', category: 'Execution', question: 'What is the difference between training and inference?', answer: 'Training changes parameters; inference uses the trained parameters' },
+      { id: 'qna-39', category: 'Decoding & Sampling', question: 'What is sampling?', answer: 'Selecting the next token from a probability distribution' },
+      { id: 'qna-40', category: 'Decoding & Sampling', question: 'What does temperature control?', answer: 'The randomness/variability of generation' },
+      { id: 'qna-41', category: 'Decoding & Sampling', question: 'What generally happens when temperature is increased?', answer: 'Output becomes more diverse/random' },
+      { id: 'qna-42', category: 'Decoding & Sampling', question: 'What generally happens when temperature is decreased?', answer: 'Output becomes more deterministic' },
+      { id: 'qna-43', category: 'Decoding & Sampling', question: 'What is a probability distribution over tokens?', answer: 'The model\'s estimated probabilities for possible next tokens' },
+      { id: 'qna-44', category: 'Decoding & Sampling', question: 'What is a logit?', answer: 'An unnormalized score produced by the model before converting scores into probabilities' },
+      { id: 'qna-45', category: 'Decoding & Sampling', question: 'What function commonly converts logits into probabilities?', answer: 'Softmax' },
+      { id: 'qna-46', category: 'Decoding & Sampling', question: 'What is the most likely next token called?', answer: 'The token with the highest predicted probability' },
+      { id: 'qna-47', category: 'Decoding & Sampling', question: 'What is greedy decoding?', answer: 'Always selecting the highest-probability next token' },
+      { id: 'qna-48', category: 'Safety & Hallucination', question: 'What is hallucination?', answer: 'Generating information that is incorrect, fabricated, or unsupported' },
+      { id: 'qna-49', category: 'Safety & Hallucination', question: 'Why do LLMs hallucinate?', answer: 'They are optimized to generate likely continuations rather than inherently verify truth' },
+      { id: 'qna-50', category: 'Safety & Hallucination', question: 'Does fluent language guarantee factual accuracy?', answer: 'No' },
+      { id: 'qna-51', category: 'Alignment', question: 'What is post-training?', answer: 'Training performed after pretraining to improve behavior, instruction following, and alignment' },
+      { id: 'qna-52', category: 'Alignment', question: 'What is instruction tuning?', answer: 'Training a model to better follow human instructions' },
+      { id: 'qna-53', category: 'Alignment', question: 'What does RLHF stand for?', answer: 'Reinforcement Learning from Human Feedback' },
+      { id: 'qna-54', category: 'Alignment', question: 'What is the purpose of RLHF?', answer: 'Aligning model behavior with human preferences' },
+      { id: 'qna-55', category: 'Alignment', question: 'What is a reward model?', answer: 'A model that estimates how desirable a response is according to learned preferences' },
+      { id: 'qna-56', category: 'Alignment', question: 'What is alignment?', answer: 'Making model behavior better match intended human goals and preferences' },
+      { id: 'qna-57', category: 'Alignment', question: 'Why is post-training important?', answer: 'It makes pretrained models more useful, controllable, and aligned with user instructions' },
+      { id: 'qna-58', category: 'Alignment', question: 'What is instruction following?', answer: 'The ability of a model to produce responses appropriate to a user\'s instructions' },
+      { id: 'qna-59', category: 'Machine Learning', question: 'What is reinforcement learning?', answer: 'Learning through rewards or penalties associated with actions' },
+      { id: 'qna-60', category: 'Alignment', question: 'What is the role of human preferences in RLHF?', answer: 'They provide signals about which model outputs are preferred' },
+      { id: 'qna-61', category: 'Reasoning & Logic', question: 'What is reasoning in LLMs?', answer: 'Performing multi-step processing to arrive at an answer' },
+      { id: 'qna-62', category: 'Reasoning & Logic', question: 'Why can reasoning models use more tokens?', answer: 'They may perform additional internal/visible computation before producing the final answer' },
+      { id: 'qna-63', category: 'Reasoning & Logic', question: 'What is test-time compute?', answer: 'Computational resources used while generating an answer' },
+      { id: 'qna-64', category: 'Tools & Agents', question: 'What is tool use by an LLM?', answer: 'Using external tools such as calculators, search, code execution, or APIs' },
+      { id: 'qna-65', category: 'Tools & Agents', question: 'Why are tools useful for LLMs?', answer: 'They extend the model\'s capabilities beyond what it can reliably do internally' },
+      { id: 'qna-66', category: 'Tools & Agents', question: 'Can an LLM use a calculator as a tool?', answer: 'Yes' },
+      { id: 'qna-67', category: 'Tools & Agents', question: 'Can an LLM use external search as a tool?', answer: 'Yes' },
+      { id: 'qna-68', category: 'Integration', question: 'What is an API?', answer: 'An interface that allows software systems to communicate with each other' },
+      { id: 'qna-69', category: 'Tools & Agents', question: 'What is tool calling?', answer: 'The model requesting an external tool to perform a specific operation' },
+      { id: 'qna-70', category: 'RAG Systems', question: 'What is retrieval-augmented generation (RAG)?', answer: 'Generating responses using information retrieved from an external knowledge source' },
+      { id: 'qna-71', category: 'RAG Systems', question: 'Why can RAG reduce hallucination?', answer: 'It can provide relevant external information for the model to use' },
+      { id: 'qna-72', category: 'RAG Systems', question: 'Does RAG guarantee that an answer is correct?', answer: 'No' },
+      { id: 'qna-73', category: 'AI Agents', question: 'What is an AI agent?', answer: 'A system that can use models, tools, and actions to accomplish tasks' },
+      { id: 'qna-74', category: 'AI Agents', question: 'What is the difference between an LLM and an AI agent?', answer: 'An LLM generates predictions/text, while an agent can use the model together with tools and actions' },
+      { id: 'qna-75', category: 'Multimodal AI', question: 'What is multimodality?', answer: 'The ability to process or generate multiple types of data such as text, images, audio, or video' },
+      { id: 'qna-76', category: 'Multimodal AI', question: 'Can modern AI models process more than text?', answer: 'Yes' },
+      { id: 'qna-77', category: 'Hardware & Compute', question: 'What is a GPU?', answer: 'A processor highly suited to the parallel mathematical operations used in neural networks' },
+      { id: 'qna-78', category: 'Hardware & Compute', question: 'Why are GPUs important for LLMs?', answer: 'They efficiently perform the large-scale parallel computations required for training and inference' },
+      { id: 'qna-79', category: 'Hardware & Compute', question: 'Why does training large LLMs require substantial computing resources?', answer: 'Large models and datasets require enormous numbers of mathematical operations' },
+      { id: 'qna-80', category: 'Scaling Laws', question: 'What is model scaling?', answer: 'Increasing factors such as model size, data, or compute to improve capabilities' },
+      { id: 'qna-81', category: 'Architecture', question: 'What is a foundation model?', answer: 'A broadly pretrained model that can serve as the basis for many downstream applications' },
+      { id: 'qna-82', category: 'Model Adaptation', question: 'What is fine-tuning?', answer: 'Further training a pretrained model for a particular behavior, task, or domain' },
+      { id: 'qna-83', category: 'Model Adaptation', question: 'How does fine-tuning differ from pretraining?', answer: 'Fine-tuning adapts an already pretrained model, while pretraining establishes broad capabilities' },
+      { id: 'qna-84', category: 'Open Source AI', question: 'What is an open-weight model?', answer: 'A model whose learned weights are made available to users' },
+      { id: 'qna-85', category: 'Open Source AI', question: 'What is a closed model?', answer: 'A model whose underlying weights or implementation are not fully publicly available' },
+      { id: 'qna-86', category: 'Cost & Efficiency', question: 'Why is inference cost important?', answer: 'Generating responses requires computational resources and therefore costs money/energy' },
+      { id: 'qna-87', category: 'Cost & Efficiency', question: 'Why can larger models be more expensive to run?', answer: 'They generally require more computation and memory' },
+      { id: 'qna-88', category: 'Compression', question: 'What is quantization?', answer: 'Representing model values with lower numerical precision to reduce memory and computation' },
+      { id: 'qna-89', category: 'Compression', question: 'What is the main benefit of quantization?', answer: 'Reduced memory usage and potentially faster/cheaper inference' },
+      { id: 'qna-90', category: 'Lifecycle Pipeline', question: 'What is the overall LLM development pipeline?', answer: 'Data -> Tokenization -> Pretraining -> Post-training/Alignment -> Inference/Use' },
+      { id: 'qna-91', category: 'Fundamentals', question: 'What is the fundamental prediction unit of an LLM?', answer: 'A token' },
+      { id: 'qna-92', category: 'Fundamentals', question: 'Does an LLM directly predict complete answers in one step?', answer: 'No' },
+      { id: 'qna-93', category: 'Generation', question: 'How is a long response generated?', answer: 'By repeatedly predicting one token after another' },
+      { id: 'qna-94', category: 'Generation', question: 'What happens after a token is generated during autoregressive generation?', answer: 'It becomes part of the context for predicting the next token' },
+      { id: 'qna-95', category: 'Sampling & Randomness', question: 'Why can LLMs produce different answers to the same prompt?', answer: 'Probabilistic sampling can select different tokens' },
+      { id: 'qna-96', category: 'Fundamentals', question: 'What is the central idea behind modern LLMs?', answer: 'Learning statistical representations of language through large-scale training and using them to predict/generate tokens' }
     ]);
 
     this.trendingTools.set([

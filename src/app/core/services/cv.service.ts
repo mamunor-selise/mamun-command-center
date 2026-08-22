@@ -30,6 +30,22 @@ export class CvService {
       const user = this.authService.currentUser();
       this.loadUserCvProfiles(user);
     });
+
+    if (isPlatformBrowser(this.platformId)) {
+      let savedTitle = document.title;
+      window.addEventListener('beforeprint', () => {
+        savedTitle = document.title;
+        const active = this.activeProfile();
+        if (active?.personalInfo?.fullName) {
+          document.title = `${active.personalInfo.fullName} - Resume`;
+        } else {
+          document.title = 'Resume';
+        }
+      });
+      window.addEventListener('afterprint', () => {
+        document.title = savedTitle;
+      });
+    }
   }
 
   private getStorageKey(): string {
@@ -361,7 +377,17 @@ export class CvService {
 
   exportToPdf() {
     if (isPlatformBrowser(this.platformId)) {
+      const active = this.activeProfile();
+      const originalTitle = document.title;
+      if (active?.personalInfo?.fullName) {
+        document.title = `${active.personalInfo.fullName} - Resume`;
+      } else {
+        document.title = 'Resume';
+      }
       window.print();
+      setTimeout(() => {
+        document.title = originalTitle;
+      }, 1000);
     }
   }
 

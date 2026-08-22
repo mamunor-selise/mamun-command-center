@@ -86,12 +86,16 @@ Database Name - AE3EEEDC-E790-4CDB-96D5-2DD31F26C9CC
 - [ ] Perform full system testing, error handling, and performance optimization.
 
 ### *** Phase 5: AI buzzword this week ***
-- [x] Under Dashboard show a list of AI tools that are currently trending, and if click the tool, it will open the tool in a new tab.
+- [x] Under Dashboard -->show a list of AI tools that are currently trending, and if click the tool, it will open the tool in a new tab.
 - [x] create a AI tools store 
 - [x] Buzzword this week 
 - [x] There will be three vertical cards showing above information
 - [x] Buzzword will be top card
 - [x] Use Open Router for getting all information
+### *** Phase 6: Query builder (Visual) ***
+- [x] Read comprehensively query-builder.md file 
+- [x] Build a query builder (Visual)
+- [x] Keep update in the progress.md file
 
 ---
 

@@ -1,7 +1,14 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AiTrendsService, AiBuzzword, TrendingAiTool, StoreAiTool } from '../../../../core/services/ai-trends.service';
+import { AiTrendsService, AiBuzzword, TechQna, TrendingAiTool, StoreAiTool } from '../../../../core/services/ai-trends.service';
+
+export interface AccordionState {
+  buzzwords: boolean;
+  qna: boolean;
+  trending: boolean;
+  store: boolean;
+}
 
 @Component({
   selector: 'app-ai-trends-section',
@@ -43,195 +50,298 @@ import { AiTrendsService, AiBuzzword, TrendingAiTool, StoreAiTool } from '../../
         </div>
       }
 
-      <!-- THREE VERTICAL SECTIONS CONTAINER (Top Card = Buzzword this week) -->
-      <div class="flex flex-col space-y-6">
+      <!-- ACCORDION SECTIONS CONTAINER -->
+      <div class="flex flex-col space-y-4">
         
-        <!-- CARD 1 (TOP CARD): 🔥 BUZZWORD THIS WEEK -->
-        <div class="bg-white dark:bg-slate-800/60 border border-purple-500/30 dark:border-purple-500/40 rounded-2xl p-4 shadow-sm dark:shadow-none transition-all">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700/60">
+        <!-- ACCORDION 1 (TOP CARD): 🔥 BUZZWORD THIS WEEK -->
+        <div class="bg-white dark:bg-slate-800/60 border border-purple-500/30 dark:border-purple-500/40 rounded-2xl shadow-sm dark:shadow-none transition-all overflow-hidden">
+          <div
+            (click)="toggleSection('buzzwords')"
+            class="flex items-center justify-between p-4 cursor-pointer select-none bg-slate-50/50 dark:bg-slate-800/80 hover:bg-purple-500/5 transition-colors border-b border-slate-200 dark:border-slate-700/60"
+          >
             <div class="flex items-center space-x-2">
-              <div class="h-8 w-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center text-base font-bold">
+              <div class="h-7 w-7 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center text-sm font-bold">
                 🔥
               </div>
-              <div>
-                <div class="flex items-center space-x-1.5">
-                  <h3 class="text-xs font-bold text-slate-900 dark:text-white">Buzzword this Week</h3>
-                  <span class="px-1.5 py-0.5 text-[8px] font-extrabold uppercase rounded bg-amber-500/20 text-amber-600 dark:text-amber-400">
-                    TOP CARD
-                  </span>
-                </div>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400">Click item for full details</p>
+              <div class="flex items-center space-x-1.5">
+                <h3 class="text-xs font-bold text-slate-900 dark:text-white">Buzzword this Week</h3>
+                <span class="px-1.5 py-0.5 text-[8px] font-extrabold uppercase rounded bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                  TOP CARD
+                </span>
               </div>
             </div>
-            <span class="text-[10px] font-semibold text-purple-600 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">
-              {{ aiTrendsService.buzzwords().length }} Trends
-            </span>
+
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] font-semibold text-purple-600 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">
+                {{ aiTrendsService.buzzwords().length }} Trends
+              </span>
+              <span class="text-xs text-slate-400 transition-transform duration-200" [class.rotate-180]="openSections().buzzwords">
+                ▼
+              </span>
+            </div>
           </div>
 
-          <!-- Buzzword Scrollable Clean List -->
-          <div class="mt-2 max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
-            @for (bw of aiTrendsService.buzzwords(); track bw.id) {
-              <div
-                (click)="selectedBuzzword.set(bw)"
-                class="group py-2.5 px-2 hover:bg-purple-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
-              >
-                <div class="flex items-center space-x-2.5 overflow-hidden">
-                  <span class="text-xs font-bold text-amber-500 flex-shrink-0">🔥</span>
-                  <div class="truncate">
-                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
-                      {{ bw.title }}
-                    </h4>
-                    <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                      {{ bw.category }} • "{{ bw.tagline }}"
-                    </p>
+          @if (openSections().buzzwords) {
+            <div class="p-4 pt-2">
+              <!-- Buzzword Scrollable Clean List -->
+              <div class="max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
+                @for (bw of aiTrendsService.buzzwords(); track bw.id) {
+                  <div
+                    (click)="selectedBuzzword.set(bw)"
+                    class="group py-2.5 px-2 hover:bg-purple-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <div class="flex items-center space-x-2.5 overflow-hidden">
+                      <span class="text-xs font-bold text-amber-500 flex-shrink-0">🔥</span>
+                      <div class="truncate">
+                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
+                          {{ bw.title }}
+                        </h4>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                          {{ bw.category }} • "{{ bw.tagline }}"
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-1.5 flex-shrink-0 ml-2">
+                      <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                        📈 {{ bw.trendScore }}
+                      </span>
+                      <span class="text-xs text-purple-600 dark:text-purple-400 font-bold">→</span>
+                    </div>
                   </div>
-                </div>
-
-                <div class="flex items-center space-x-1.5 flex-shrink-0 ml-2">
-                  <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400">
-                    📈 {{ bw.trendScore }}
-                  </span>
-                  <span class="text-xs text-purple-600 dark:text-purple-400 font-bold">→</span>
-                </div>
+                }
               </div>
-            }
-          </div>
+            </div>
+          }
         </div>
 
-        <!-- CARD 2: ⚡ TRENDING AI TOOLS -->
-        <div class="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-4 shadow-sm dark:shadow-none transition-all">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700/60">
+        <!-- ACCORDION 2: ❓ TECH Q&A & KNOWLEDGE FLASHCARDS (UNDER BUZZWORD) -->
+        <div class="bg-white dark:bg-slate-800/60 border border-blue-500/30 dark:border-blue-500/40 rounded-2xl shadow-sm dark:shadow-none transition-all overflow-hidden">
+          <div
+            (click)="toggleSection('qna')"
+            class="flex items-center justify-between p-4 cursor-pointer select-none bg-slate-50/50 dark:bg-slate-800/80 hover:bg-blue-500/5 transition-colors border-b border-slate-200 dark:border-slate-700/60"
+          >
             <div class="flex items-center space-x-2">
-              <div class="h-8 w-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-base font-bold">
+              <div class="h-7 w-7 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center text-sm font-bold">
+                ❓
+              </div>
+              <div class="flex items-center space-x-1.5">
+                <h3 class="text-xs font-bold text-slate-900 dark:text-white">Tech Q&A & Flashcards</h3>
+                <span class="px-1.5 py-0.5 text-[8px] font-extrabold uppercase rounded bg-blue-500/20 text-blue-600 dark:text-blue-400">
+                  Q&A
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">
+                {{ aiTrendsService.qnaItems().length }} Qs
+              </span>
+              <span class="text-xs text-slate-400 transition-transform duration-200" [class.rotate-180]="openSections().qna">
+                ▼
+              </span>
+            </div>
+          </div>
+
+          @if (openSections().qna) {
+            <div class="p-4 pt-2">
+              <!-- Q&A Search Bar -->
+              <div class="relative w-full mb-2">
+                <input
+                  type="text"
+                  [ngModel]="qnaSearchQuery()"
+                  (ngModelChange)="qnaSearchQuery.set($event)"
+                  placeholder="Search 96 Q&As (e.g. token, RAG, prompt)..."
+                  class="w-full pl-7 pr-3 py-1 text-xs rounded-xl bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                />
+                <span class="absolute left-2.5 top-1.5 text-xs text-slate-400">🔍</span>
+              </div>
+
+              <!-- Q&A Scrollable Clean List -->
+              <div class="max-h-64 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
+                @for (qna of filteredQnaItems(); track qna.id) {
+                  <div
+                    (click)="selectedQna.set(qna)"
+                    class="group py-2.5 px-2 hover:bg-blue-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <div class="flex items-center space-x-2.5 overflow-hidden">
+                      <span class="text-xs font-bold text-blue-500 flex-shrink-0">❓</span>
+                      <div class="truncate">
+                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                          {{ qna.question }}
+                        </h4>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                          {{ qna.category }} • Click to read answer
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-1 flex-shrink-0 ml-2">
+                      <span class="text-xs text-blue-600 dark:text-blue-400 font-bold">→</span>
+                    </div>
+                  </div>
+                } @empty {
+                  <div class="py-6 text-center text-slate-500 dark:text-slate-400 text-xs">
+                    No questions match your query.
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- ACCORDION 3: ⚡ TRENDING AI TOOLS -->
+        <div class="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-2xl shadow-sm dark:shadow-none transition-all overflow-hidden">
+          <div
+            (click)="toggleSection('trending')"
+            class="flex items-center justify-between p-4 cursor-pointer select-none bg-slate-50/50 dark:bg-slate-800/80 hover:bg-indigo-500/5 transition-colors border-b border-slate-200 dark:border-slate-700/60"
+          >
+            <div class="flex items-center space-x-2">
+              <div class="h-7 w-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-sm font-bold">
                 ⚡
               </div>
-              <div>
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white">Trending AI Tools</h3>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400">Click item to view & launch ↗</p>
+              <h3 class="text-xs font-bold text-slate-900 dark:text-white">Trending AI Tools</h3>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded">
+                {{ aiTrendsService.trendingTools().length }} Tools
+              </span>
+              <span class="text-xs text-slate-400 transition-transform duration-200" [class.rotate-180]="openSections().trending">
+                ▼
+              </span>
+            </div>
+          </div>
+
+          @if (openSections().trending) {
+            <div class="p-4 pt-2">
+              <!-- Tools Scrollable Clean List -->
+              <div class="max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
+                @for (tool of aiTrendsService.trendingTools(); track tool.id) {
+                  <div
+                    (click)="selectedTrendingTool.set(tool)"
+                    class="group py-2.5 px-2 hover:bg-indigo-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <div class="flex items-center space-x-2.5 overflow-hidden">
+                      <span class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 w-5 flex-shrink-0 text-center">#{{ tool.trendingRank }}</span>
+                      <span class="text-base flex-shrink-0">{{ tool.icon }}</span>
+                      <div class="truncate">
+                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                          {{ tool.name }}
+                        </h4>
+                        <span class="text-[10px] text-slate-500 dark:text-slate-400">
+                          {{ tool.category }} • ⭐ {{ tool.rating }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+                      <span class="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                        {{ tool.pricing }}
+                      </span>
+                      <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400">↗</span>
+                    </div>
+                  </div>
+                }
               </div>
             </div>
-            <span class="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded">
-              {{ aiTrendsService.trendingTools().length }} Tools
-            </span>
-          </div>
-
-          <!-- Tools Scrollable Clean List -->
-          <div class="mt-2 max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
-            @for (tool of aiTrendsService.trendingTools(); track tool.id) {
-              <div
-                (click)="selectedTrendingTool.set(tool)"
-                class="group py-2.5 px-2 hover:bg-indigo-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
-              >
-                <div class="flex items-center space-x-2.5 overflow-hidden">
-                  <span class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 w-5 flex-shrink-0 text-center">#{{ tool.trendingRank }}</span>
-                  <span class="text-base flex-shrink-0">{{ tool.icon }}</span>
-                  <div class="truncate">
-                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      {{ tool.name }}
-                    </h4>
-                    <span class="text-[10px] text-slate-500 dark:text-slate-400">
-                      {{ tool.category }} • ⭐ {{ tool.rating }}
-                    </span>
-                  </div>
-                </div>
-
-                <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
-                  <span class="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                    {{ tool.pricing }}
-                  </span>
-                  <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400">↗</span>
-                </div>
-              </div>
-            }
-          </div>
+          }
         </div>
 
-        <!-- CARD 3: 🛍️ AI TOOLS STORE -->
-        <div class="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-4 shadow-sm dark:shadow-none transition-all">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700/60">
+        <!-- ACCORDION 4: 🛍️ AI TOOLS STORE -->
+        <div class="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-2xl shadow-sm dark:shadow-none transition-all overflow-hidden">
+          <div
+            (click)="toggleSection('store')"
+            class="flex items-center justify-between p-4 cursor-pointer select-none bg-slate-50/50 dark:bg-slate-800/80 hover:bg-emerald-500/5 transition-colors border-b border-slate-200 dark:border-slate-700/60"
+          >
             <div class="flex items-center space-x-2">
-              <div class="h-8 w-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-base font-bold">
+              <div class="h-7 w-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-sm font-bold">
                 🛍️
               </div>
-              <div>
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white">AI Tools Store</h3>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400">Curated directory</p>
-              </div>
+              <h3 class="text-xs font-bold text-slate-900 dark:text-white">AI Tools Store</h3>
             </div>
 
-            <button
-              (click)="showAddModal.set(true)"
-              class="px-2 py-1 text-[10px] font-semibold rounded-lg text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 transition-all flex items-center space-x-1 cursor-pointer"
-            >
-              <span>➕</span>
-              <span>Submit</span>
-            </button>
-          </div>
-
-          <!-- Search & Filter Controls -->
-          <div class="mt-3 space-y-2">
-            <div class="relative w-full">
-              <input
-                type="text"
-                [ngModel]="aiTrendsService.searchQuery()"
-                (ngModelChange)="aiTrendsService.searchQuery.set($event)"
-                placeholder="Search store..."
-                class="w-full pl-7 pr-3 py-1 text-xs rounded-xl bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"
-              />
-              <span class="absolute left-2.5 top-1.5 text-xs text-slate-400">🔍</span>
-            </div>
-
-            <!-- Category Pills -->
-            <div class="flex items-center space-x-1 overflow-x-auto pb-1 scrollbar-none">
-              @for (cat of aiTrendsService.categories(); track cat) {
-                <button
-                  (click)="aiTrendsService.selectedCategory.set(cat)"
-                  [class.bg-emerald-600]="aiTrendsService.selectedCategory() === cat"
-                  [class.text-white]="aiTrendsService.selectedCategory() === cat"
-                  [class.bg-slate-100]="aiTrendsService.selectedCategory() !== cat"
-                  [class.dark:bg-slate-800]="aiTrendsService.selectedCategory() !== cat"
-                  [class.text-slate-700]="aiTrendsService.selectedCategory() !== cat"
-                  [class.dark:text-slate-300]="aiTrendsService.selectedCategory() !== cat"
-                  class="px-2 py-0.5 text-[10px] font-medium rounded transition-colors whitespace-nowrap cursor-pointer"
-                >
-                  {{ cat }}
-                </button>
-              }
-            </div>
-          </div>
-
-          <!-- Store Scrollable Clean List -->
-          <div class="mt-2 max-h-64 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
-            @for (tool of aiTrendsService.filteredStoreTools(); track tool.id) {
-              <div
-                (click)="selectedStoreTool.set(tool)"
-                class="group py-2 px-2 hover:bg-emerald-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
+            <div class="flex items-center space-x-2">
+              <button
+                (click)="$event.stopPropagation(); showAddModal.set(true)"
+                class="px-2 py-0.5 text-[10px] font-semibold rounded text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 transition-all flex items-center space-x-1"
               >
-                <div class="flex items-center space-x-2.5 overflow-hidden">
-                  <span class="text-base flex-shrink-0">{{ tool.icon }}</span>
-                  <div class="truncate">
-                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                      {{ tool.name }}
-                    </h4>
-                    <span class="text-[10px] text-slate-500 dark:text-slate-400">
-                      {{ tool.category }} • ⭐ {{ tool.rating }}
-                    </span>
-                  </div>
+                <span>➕ Submit</span>
+              </button>
+              <span class="text-xs text-slate-400 transition-transform duration-200" [class.rotate-180]="openSections().store">
+                ▼
+              </span>
+            </div>
+          </div>
+
+          @if (openSections().store) {
+            <div class="p-4 pt-2">
+              <!-- Search & Filter Controls -->
+              <div class="space-y-2 mb-3">
+                <div class="relative w-full">
+                  <input
+                    type="text"
+                    [ngModel]="aiTrendsService.searchQuery()"
+                    (ngModelChange)="aiTrendsService.searchQuery.set($event)"
+                    placeholder="Search store..."
+                    class="w-full pl-7 pr-3 py-1 text-xs rounded-xl bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"
+                  />
+                  <span class="absolute left-2.5 top-1.5 text-xs text-slate-400">🔍</span>
                 </div>
 
-                <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
-                  <span class="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                    {{ tool.pricing }}
-                  </span>
-                  <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">↗</span>
+                <!-- Category Pills -->
+                <div class="flex items-center space-x-1 overflow-x-auto pb-1 scrollbar-none">
+                  @for (cat of aiTrendsService.categories(); track cat) {
+                    <button
+                      (click)="aiTrendsService.selectedCategory.set(cat)"
+                      [class.bg-emerald-600]="aiTrendsService.selectedCategory() === cat"
+                      [class.text-white]="aiTrendsService.selectedCategory() === cat"
+                      [class.bg-slate-100]="aiTrendsService.selectedCategory() !== cat"
+                      [class.dark:bg-slate-800]="aiTrendsService.selectedCategory() !== cat"
+                      [class.text-slate-700]="aiTrendsService.selectedCategory() !== cat"
+                      [class.dark:text-slate-300]="aiTrendsService.selectedCategory() !== cat"
+                      class="px-2 py-0.5 text-[10px] font-medium rounded transition-colors whitespace-nowrap cursor-pointer"
+                    >
+                      {{ cat }}
+                    </button>
+                  }
                 </div>
               </div>
-            } @empty {
-              <div class="py-6 text-center text-slate-500 dark:text-slate-400 text-xs">
-                No tools match your search.
+
+              <!-- Store Scrollable Clean List -->
+              <div class="max-h-64 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700/50 custom-scrollbar">
+                @for (tool of aiTrendsService.filteredStoreTools(); track tool.id) {
+                  <div
+                    (click)="selectedStoreTool.set(tool)"
+                    class="group py-2 px-2 hover:bg-emerald-500/10 rounded-lg transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <div class="flex items-center space-x-2.5 overflow-hidden">
+                      <span class="text-base flex-shrink-0">{{ tool.icon }}</span>
+                      <div class="truncate">
+                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                          {{ tool.name }}
+                        </h4>
+                        <span class="text-[10px] text-slate-500 dark:text-slate-400">
+                          {{ tool.category }} • ⭐ {{ tool.rating }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+                      <span class="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                        {{ tool.pricing }}
+                      </span>
+                      <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">↗</span>
+                    </div>
+                  </div>
+                } @empty {
+                  <div class="py-6 text-center text-slate-500 dark:text-slate-400 text-xs">
+                    No tools match your search.
+                  </div>
+                }
               </div>
-            }
-          </div>
+            </div>
+          }
         </div>
 
       </div>
@@ -295,7 +405,43 @@ import { AiTrendsService, AiBuzzword, TrendingAiTool, StoreAiTool } from '../../
       </div>
     }
 
-    <!-- MODAL 2: TRENDING TOOL DETAILS MODAL -->
+    <!-- MODAL 2: TECH Q&A ANSWER DETAILS MODAL -->
+    @if (selectedQna(); as qna) {
+      <div class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 border border-blue-500/30 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+          <div class="flex items-start justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div>
+              <span class="px-2 py-0.5 text-[10px] font-semibold rounded bg-blue-500/15 text-blue-600 dark:text-blue-300 border border-blue-500/20">
+                {{ qna.category }}
+              </span>
+              <h3 class="text-base font-bold text-slate-900 dark:text-white mt-1.5 flex items-center space-x-2">
+                <span>❓</span>
+                <span>{{ qna.question }}</span>
+              </h3>
+            </div>
+            <button (click)="selectedQna.set(null)" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl font-bold cursor-pointer">✕</button>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20 text-slate-800 dark:text-slate-200 leading-relaxed">
+              <strong class="text-blue-600 dark:text-blue-400 font-bold block mb-1">Answer & Explanation:</strong>
+              <p class="text-slate-700 dark:text-slate-300 leading-relaxed">{{ qna.answer }}</p>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+            <button
+              (click)="selectedQna.set(null)"
+              class="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all shadow-md cursor-pointer"
+            >
+              Close Q&A
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- MODAL 3: TRENDING TOOL DETAILS MODAL -->
     @if (selectedTrendingTool(); as tool) {
       <div class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 border border-indigo-500/30 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
@@ -355,7 +501,7 @@ import { AiTrendsService, AiBuzzword, TrendingAiTool, StoreAiTool } from '../../
       </div>
     }
 
-    <!-- MODAL 3: STORE TOOL DETAILS MODAL -->
+    <!-- MODAL 4: STORE TOOL DETAILS MODAL -->
     @if (selectedStoreTool(); as tool) {
       <div class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 border border-emerald-500/30 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
@@ -520,8 +666,36 @@ export class AiTrendsSectionComponent {
 
   showAddModal = signal<boolean>(false);
   selectedBuzzword = signal<AiBuzzword | null>(null);
+  selectedQna = signal<TechQna | null>(null);
   selectedTrendingTool = signal<TrendingAiTool | null>(null);
   selectedStoreTool = signal<StoreAiTool | null>(null);
+
+  qnaSearchQuery = signal<string>('');
+
+  filteredQnaItems = computed(() => {
+    const query = this.qnaSearchQuery().toLowerCase().trim();
+    const items = this.aiTrendsService.qnaItems();
+    if (!query) return items;
+    return items.filter(q =>
+      q.question.toLowerCase().includes(query) ||
+      q.answer.toLowerCase().includes(query) ||
+      q.category.toLowerCase().includes(query)
+    );
+  });
+
+  openSections = signal<AccordionState>({
+    buzzwords: true,
+    qna: true,
+    trending: false,
+    store: false
+  });
+
+  toggleSection(sectionKey: keyof AccordionState) {
+    this.openSections.update(state => ({
+      ...state,
+      [sectionKey]: !state[sectionKey]
+    }));
+  }
 
   newTool: Partial<StoreAiTool> = {
     name: '',
