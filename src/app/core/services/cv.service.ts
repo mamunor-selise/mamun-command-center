@@ -66,7 +66,8 @@ export class CvService {
         const data = await response.json();
         if (data.profiles && Array.isArray(data.profiles) && data.profiles.length > 0) {
           const formattedProfiles = data.profiles.map((p: CvProfile) => {
-            if (user && (p.personalInfo.fullName === 'Mamun Or Rashid' || p.personalInfo.fullName === 'Guest Developer' || !p.personalInfo.fullName)) {
+            if (!p.personalInfo || !p.personalInfo.fullName) {
+              if (!p.personalInfo) (p as any).personalInfo = {};
               p.personalInfo.fullName = userName;
               p.personalInfo.email = userEmail;
             }
@@ -85,11 +86,12 @@ export class CvService {
       this.isLoading.set(false);
     }
 
-    // Fallback: Populate local default CV profile with logged-in user name & email
+    // Fallback: Populate local default CV profile
     const localProfiles = this.readFromLocalStorage();
     if (localProfiles.length > 0) {
       const formatted = localProfiles.map((p: CvProfile) => {
-        if (user && (p.personalInfo.fullName === 'Mamun Or Rashid' || p.personalInfo.fullName === 'Guest Developer' || !p.personalInfo.fullName)) {
+        if (!p.personalInfo || !p.personalInfo.fullName) {
+          if (!p.personalInfo) (p as any).personalInfo = {};
           p.personalInfo.fullName = userName;
           p.personalInfo.email = userEmail;
         }
@@ -235,42 +237,78 @@ export class CvService {
     }
   }
 
-  createNewProfile(title = 'New Resume Profile', targetRole = 'Software Engineer'): CvProfile {
+  createNewProfile(title = 'New Resume Profile', personName?: string, targetRole = 'Senior Software Engineer'): CvProfile {
     const newId = 'cv-' + Date.now();
     const user = this.authService.currentUser();
-    const userName = user?.name || 'Guest Developer';
-    const userEmail = user?.email || 'guest@example.com';
 
-    const current = this.activeProfile();
-    const basePersonalInfo = current ? { ...current.personalInfo } : {
-      fullName: userName,
-      jobTitle: targetRole,
-      email: userEmail,
-      phone: '+880 1700-000000',
-      location: 'Dhaka, Bangladesh',
-      website: '',
-      github: '',
-      linkedin: '',
-      avatarUrl: '',
-      summary: 'Experienced software developer with a strong focus on high quality clean code and modern web frameworks.'
-    };
-
-    basePersonalInfo.fullName = userName;
-    basePersonalInfo.email = userEmail;
+    const fullName = personName || 'JOHN DOE';
+    const email = personName 
+      ? `${personName.toLowerCase().replace(/\s+/g, '.')}@email.com` 
+      : (user?.email || 'john.doe@email.com');
 
     const newCv: CvProfile = {
       id: newId,
-      title,
-      targetRole,
+      title: title || `${fullName}'s Resume`,
+      targetRole: targetRole || 'Senior Software Engineer',
       templateStyle: 'modern',
       fontSize: 'base',
       spacing: 'normal',
-      personalInfo: basePersonalInfo,
-      experiences: current ? [...current.experiences.map(e => ({ ...e, id: 'exp-' + Math.random().toString(36).substr(2, 9) }))] : [],
-      education: current ? [...current.education.map(e => ({ ...e, id: 'edu-' + Math.random().toString(36).substr(2, 9) }))] : [],
-      skillCategories: current ? [...current.skillCategories.map(s => ({ ...s, id: 'cat-' + Math.random().toString(36).substr(2, 9) }))] : [],
-      projects: current ? [...current.projects.map(p => ({ ...p, id: 'proj-' + Math.random().toString(36).substr(2, 9) }))] : [],
-      certifications: current ? [...current.certifications.map(c => ({ ...c, id: 'cert-' + Math.random().toString(36).substr(2, 9) }))] : [],
+      personalInfo: {
+        fullName: fullName,
+        jobTitle: targetRole || 'Senior Software Engineer',
+        email: email,
+        phone: '+880 1712 345 678',
+        location: 'Dhaka, Bangladesh',
+        website: '',
+        github: `github.com/${fullName.toLowerCase().replace(/\s+/g, '')}`,
+        linkedin: `linkedin.com/in/${fullName.toLowerCase().replace(/\s+/g, '')}`,
+        avatarUrl: '',
+        summary: `Results-driven Software Engineer with experience designing, developing, and maintaining scalable web applications.`
+      },
+      experiences: [
+        {
+          id: 'exp-1',
+          company: 'ABC Technologies Ltd.',
+          role: targetRole || 'Senior Software Engineer',
+          location: 'Dhaka, Bangladesh',
+          startDate: 'Jan 2023',
+          endDate: 'Present',
+          isCurrent: true,
+          bulletPoints: [
+            'Designed and developed enterprise web applications using Angular and .NET Core.',
+            'Collaborated with cross-functional product teams to deliver high-quality features.'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: 'edu-1',
+          institution: 'ABC University',
+          degree: 'Bachelor of Science in Computer Science',
+          fieldOfStudy: 'Computer Science',
+          location: 'Dhaka, Bangladesh',
+          startDate: '2015',
+          endDate: '2019',
+          cgpa: 'CGPA: 3.68 out of 4.00'
+        }
+      ],
+      skillCategories: [
+        {
+          id: 'cat-1',
+          name: 'SKILLS',
+          skills: [
+            'Angular | TypeScript | JavaScript',
+            'React | HTML5 | CSS3 | PrimeNG',
+            '.NET | ASP.NET Core | C#'
+          ]
+        }
+      ],
+      projects: [],
+      certifications: [],
+      languages: [
+        { id: 'l1', name: 'English', proficiency: 90 },
+        { id: 'l2', name: 'Bengali', proficiency: 100 }
+      ],
       updatedAt: new Date().toISOString()
     };
 

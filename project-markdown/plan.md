@@ -64,13 +64,8 @@ Database Name - AE3EEEDC-E790-4CDB-96D5-2DD31F26C9CC
 - [ ] Configure database connection & ORM.
 - [ ] Design main layout shell with sidebar navigation.
 
-### **Phase 2: Daily Routine Module (Week 2)**
-- [ ] Implement Task CRUD (Create, Read, Update, Delete).
-- [ ] Develop Time-block daily view calendar component.
-- [ ] Add Habit tracker with streak calculation logic.
-- [ ] Build Routine Analytics summary cards.
 
-### **Phase 3: CV Management Module (Week 3)**
+### **Phase 2: CV Management Module (Week 3)**
 - [ ] Build Master Profile data entry forms (Experience, Projects, Education, Skills).
 - [ ] Create CV Variant generator (filtering components by role).
 - [ ] Integrate export pipeline.
@@ -79,22 +74,24 @@ Database Name - AE3EEEDC-E790-4CDB-96D5-2DD31F26C9CC
 -- add 2 more section to CV - Awards, Certification
 -- Extra curriculam activity
 
-### **Phase 4: Quiz & Knowledge Test System (Week 4)**
-- [ ] Build Question Bank creation & tag management interface.
-- [ ] Develop interactive quiz taking interface with timer.
-- [ ] Implement scoring logic, result breakdown, and detailed answer keys.
-- [ ] Build mastery analytics dashboard.
-
-### **Phase 5: AI Chatbot Integration (Week 5)**
+### **Phase 3: AI Chatbot Integration (Week 5)**
 - [ ] Set up AI LLM API handler & integration.
 - [ ] Build chat UI component with streaming responses and markdown support.
 - [ ] Implement system prompt context injections (Daily Routine & CV context).
 - [ ] Add pre-configured prompt shortcut menu.
 
-### **Phase 6: Unified Dashboard & Polish (Week 6)**
+### **Phase 4: Unified Dashboard & Polish (Week 6)**
 - [ ] Build executive overview homepage dashboard summarizing today's tasks, quiz stats, and quick chat widget.
 - [ ] Implement dark/light theme switching.
 - [ ] Perform full system testing, error handling, and performance optimization.
+
+### *** Phase 5: AI buzzword this week ***
+- [x] Under Dashboard show a list of AI tools that are currently trending, and if click the tool, it will open the tool in a new tab.
+- [x] create a AI tools store 
+- [x] Buzzword this week 
+- [x] There will be three vertical cards showing above information
+- [x] Buzzword will be top card
+- [x] Use Open Router for getting all information
 
 ---
 

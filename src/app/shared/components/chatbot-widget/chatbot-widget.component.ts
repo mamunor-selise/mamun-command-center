@@ -108,7 +108,7 @@ import { CvService } from '../../../core/services/cv.service';
             </div>
           } @else {
             <!-- Chat Messages Log Container -->
-            <div #scrollContainer class="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50/50 dark:bg-slate-950/50">
+            <div #scrollContainer (scroll)="onUserScroll()" class="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50/50 dark:bg-slate-950/50">
               @for (msg of messages(); track msg.id) {
                 <div [ngClass]="msg.sender === 'user' ? 'justify-end' : 'justify-start'" class="flex items-start gap-2.5">
                   @if (msg.sender === 'bot') {
@@ -205,12 +205,28 @@ export class ChatbotWidgetComponent implements AfterViewChecked {
     }
   ]);
 
+  private shouldAutoScroll = true;
+
+  onUserScroll() {
+    if (!this.scrollContainer?.nativeElement) return;
+    const el = this.scrollContainer.nativeElement;
+    // If user is within 60px of the bottom, keep auto-scrolling on. Otherwise, pause auto-scroll.
+    const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    this.shouldAutoScroll = distanceToBottom < 60;
+  }
+
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    if (this.shouldAutoScroll) {
+      this.scrollToBottom();
+    }
   }
 
   toggleChat() {
     this.isOpen.update((v) => !v);
+    if (this.isOpen()) {
+      this.shouldAutoScroll = true;
+      setTimeout(() => this.scrollToBottom(), 50);
+    }
   }
 
   toggleSettings() {
@@ -266,6 +282,8 @@ User Question: ${text}`;
 
     this.messages.update((msgs) => [...msgs, userMsg]);
     this.newMessageText = '';
+    this.shouldAutoScroll = true;
+    setTimeout(() => this.scrollToBottom(), 50);
 
     try {
       // Build context payload

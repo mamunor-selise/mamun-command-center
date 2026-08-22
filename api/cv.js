@@ -174,7 +174,8 @@ export default async function handler(req, res) {
         profiles = [defaultCv];
       } else {
         profiles = profiles.map(p => {
-          if (authUser && (p.personalInfo.fullName === 'Mamun Or Rashid' || p.personalInfo.fullName === 'Guest Developer' || !p.personalInfo.fullName)) {
+          if (!p.personalInfo || !p.personalInfo.fullName) {
+            if (!p.personalInfo) p.personalInfo = {};
             p.personalInfo.fullName = userName;
             p.personalInfo.email = userEmail;
           }
@@ -203,7 +204,7 @@ export default async function handler(req, res) {
         updatedProfile.id = 'cv-' + Date.now();
       }
 
-      if (authUser && (!updatedProfile.personalInfo?.fullName || updatedProfile.personalInfo?.fullName === 'Mamun Or Rashid')) {
+      if (!updatedProfile.personalInfo?.fullName) {
         if (!updatedProfile.personalInfo) updatedProfile.personalInfo = {};
         updatedProfile.personalInfo.fullName = userName;
         updatedProfile.personalInfo.email = userEmail;

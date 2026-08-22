@@ -11,11 +11,11 @@ import { AuthService } from './core/services/auth.service';
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterOutlet, 
-    SidebarComponent, 
-    HeaderComponent, 
-    ChatbotWidgetComponent, 
+    CommonModule,
+    RouterOutlet,
+    SidebarComponent,
+    HeaderComponent,
+    ChatbotWidgetComponent,
     AuthPageComponent
   ],
   template: `
@@ -36,7 +36,7 @@ import { AuthService } from './core/services/auth.service';
           <app-header />
 
           <!-- Router Outlet Content -->
-          <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8">
+          <main class="flex-1 w-full mx-auto p-4 md:p-8">
             <router-outlet />
           </main>
 

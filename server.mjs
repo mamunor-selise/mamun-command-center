@@ -8,6 +8,8 @@ import chatHandler from './api/chat.js';
 import cvHandler from './api/cv.js';
 import vaultHandler from './api/vault.js';
 
+import aiTrendsHandler from './api/ai-trends.js';
+
 const PORT = process.env.PORT || 3000;
 
 const server = http.createServer(async (req, res) => {
@@ -72,6 +74,8 @@ const server = http.createServer(async (req, res) => {
         await cvHandler(req, res);
       } else if (pathname === '/api/vault') {
         await vaultHandler(req, res);
+      } else if (pathname === '/api/ai-trends') {
+        await aiTrendsHandler(req, res);
       } else {
         res.status(404).json({ error: { message: `Route ${pathname} not found on API server.` } });
       }
