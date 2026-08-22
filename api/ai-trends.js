@@ -444,14 +444,29 @@ export default async function handler(req, res) {
           },
           body: JSON.stringify({
             model: 'deepseek/deepseek-chat',
+            temperature: 0.3,
             messages: [
               {
                 role: 'system',
-                content: 'You are an expert AI industry analyst. Return JSON format with keys "buzzwords" (array of 15 items: id, title, tagline, description, category, trendScore, whyItMatters, keyTakeaway) and "trendingTools" (array of 6 items: id, name, category, description, url, pricing, trendingRank, icon, tags, rating).'
+                content: `You are a Principal AI Software Architect & Industry Analyst. Generate an authoritative, technical JSON report on weekly AI buzzwords and tools.
+
+CRITICAL QUALITY INSTRUCTIONS:
+1. "buzzwords": Provide exactly 15 active, trending AI buzzwords (e.g. Agentic Workflows, Vibe Coding, MCP, Reasoning Models, Test-Time Compute Scaling, Multimodal RAG, Speculative Decoding, etc.).
+2. Each buzzword object MUST contain:
+   - "id": "bw-1", "bw-2", ...
+   - "title": Clear, industry-standard buzzword name.
+   - "tagline": Concise, punchy 1-sentence summary of the core concept.
+   - "description": 2-3 sentence deep-dive explaining technical inner workings accurately without fluff.
+   - "category": One of ("Agentic AI", "Software Engineering", "LLM Architecture", "Data & RAG", "Inference Scaling", "DevOps & Automation", "Integration Standards", "Edge AI & Privacy", "AI Safety & Trust", "Prompt Engineering").
+   - "trendScore": Trend percentage like "98%", "95%", "92%".
+   - "whyItMatters": Explains concrete developer or business productivity impact.
+   - "keyTakeaway": Actionable, sharp 1-sentence insight for software engineers.
+3. "trendingTools": Provide 6 top trending AI tools with keys ("id", "name", "category", "description", "url", "pricing", "trendingRank", "icon", "tags", "rating").
+4. Return ONLY valid JSON format.`
               },
               {
                 role: 'user',
-                content: 'Provide 15 current weekly AI buzzwords and top trending AI tools for developer productivity, LLMs, and creative design in strict valid JSON.'
+                content: 'Generate the JSON report for current weekly AI buzzwords and trending tools following the exact schema requirements.'
               }
             ]
           })
