@@ -148,7 +148,7 @@ export class SidebarComponent {
     { label: 'CV Management', route: '/cv-management', icon: '📄' },
     { label: 'Quiz Test Engine', route: '/quiz-test', icon: '🧪', badge: 'v1.0' },
     { label: 'Query Builder', route: '/query-builder', icon: '⚡', badge: 'Visual' },
-    { label: 'Password Vault', route: '/vault', icon: '🔐', badge: 'AES' },
+    { label: 'Confidential Secrets', route: '/confidential-secrets', icon: '🔐', badge: 'AES' },
   ];
 
   @HostListener('window:resize', ['$event'])
