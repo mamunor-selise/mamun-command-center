@@ -23,7 +23,7 @@ import { PasswordGenOptions } from '../../core/services/vault-crypto.service';
         <div>
           <div class="flex items-center gap-3 mb-1">
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white font-sans flex items-center gap-2">
-              <span>🔐</span> Password & Credentials Vault
+              <span>🔐</span> Confidential Secrets
             </h1>
             <span [ngClass]="{
               'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20': vaultService.vaultState() === 'UNLOCKED',
@@ -59,7 +59,7 @@ import { PasswordGenOptions } from '../../core/services/vault-crypto.service';
             (click)="vaultService.lockVault()" 
             class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition-all flex items-center gap-1.5"
           >
-            <span>🔒</span> Lock Vault
+            <span>🔒</span> Lock Secrets
           </button>
         </div>
       </div>
@@ -71,7 +71,7 @@ import { PasswordGenOptions } from '../../core/services/vault-crypto.service';
         </div>
 
         <div>
-          <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Unlock Your Vault</h2>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Unlock Confidential Secrets</h2>
           <p class="text-xs text-slate-500 dark:text-slate-400">
             Enter your Master Password to decrypt your stored credentials locally in RAM.
           </p>
@@ -108,7 +108,7 @@ import { PasswordGenOptions } from '../../core/services/vault-crypto.service';
             [disabled]="isSubmitting()"
             class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold text-xs transition-all shadow-lg shadow-emerald-600/20"
           >
-            {{ isSubmitting() ? 'Decrypting Vault...' : '🔓 Unlock Vault' }}
+            {{ isSubmitting() ? 'Decrypting Secrets...' : '🔓 Unlock Secrets' }}
           </button>
         </form>
 
@@ -154,7 +154,7 @@ import { PasswordGenOptions } from '../../core/services/vault-crypto.service';
         <!-- Empty State -->
         <div *ngIf="filteredItems().length === 0" class="text-center py-16 bg-white dark:bg-slate-800/30 rounded-2xl border border-slate-200 dark:border-slate-700/60 space-y-3">
           <div class="text-4xl text-slate-300 dark:text-slate-600">🗝️</div>
-          <h3 class="text-base font-semibold text-slate-800 dark:text-white">No Vault Secrets Found</h3>
+          <h3 class="text-base font-semibold text-slate-800 dark:text-white">No Confidential Secrets Found</h3>
           <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
             You have no stored secrets matching your criteria. Click "+ Add Secret" to store a new credential safely.
           </p>
@@ -279,7 +279,7 @@ import { PasswordGenOptions } from '../../core/services/vault-crypto.service';
         <div class="bg-white dark:bg-slate-800 w-full max-w-lg p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl space-y-4">
           <div class="flex justify-between items-center">
             <h3 class="text-lg font-bold text-slate-900 dark:text-white">
-              {{ editingItemId() ? 'Edit Vault Secret' : 'Add New Secret' }}
+              {{ editingItemId() ? 'Edit Confidential Secret' : 'Add New Secret' }}
             </h3>
             <button (click)="showAddSecretModal.set(false)" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-base">✕</button>
           </div>

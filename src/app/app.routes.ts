@@ -12,6 +12,6 @@ export const routes: Routes = [
   { path: 'cv-management', component: CvManagementComponent },
   { path: 'quiz-test', component: QuizTestComponent },
   { path: 'query-builder', component: QueryBuilderComponent },
-  { path: 'vault', component: VaultPageComponent },
+  { path: 'confidential-secrets', component: VaultPageComponent },
   { path: '**', redirectTo: '' }
 ];
