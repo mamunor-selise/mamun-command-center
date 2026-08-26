@@ -40,7 +40,7 @@ Normal sequence: **`/ticket` → approve → `/verify` → `/pr`.**
 `/resume` is for recovery, not part of the happy path.
 
 ---
-
+ 
 ## Walkthrough — a normal ticket
 
 **You:**
