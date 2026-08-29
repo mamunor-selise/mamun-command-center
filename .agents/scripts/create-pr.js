@@ -16,9 +16,23 @@ if (fs.existsSync(envLocalPath)) {
 
 const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
 const title = process.argv[2] || 'Automated PR';
-const body = process.argv[3] || '';
+let body = process.argv[3] || '';
 const base = process.argv[4] || 'main';
 const head = process.argv[5] || execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+
+// Try loading handoff file or plan file if body is default/short
+const ticketKeyMatch = head.match(/MCC-\d+/i) || title.match(/MCC-\d+/i);
+if (ticketKeyMatch) {
+  const ticketKey = ticketKeyMatch[0].toUpperCase();
+  const handoffPath = path.join(process.cwd(), '.agents', 'plans', `${ticketKey}.handoff.md`);
+  const planPath = path.join(process.cwd(), '.agents', 'plan', `${ticketKey}.md`);
+
+  if (fs.existsSync(handoffPath)) {
+    body = fs.readFileSync(handoffPath, 'utf8');
+  } else if (fs.existsSync(planPath) && (!body || body.length < 50)) {
+    body = fs.readFileSync(planPath, 'utf8');
+  }
+}
 
 // Infer owner and repo from git remote
 function getRepoInfo() {
