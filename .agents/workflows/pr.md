@@ -46,11 +46,13 @@ Match on the URL, not on the phrase "PR opened" — otherwise the counterpart re
 
 ### 6. Create the PR
 
-- Base `BASE_BRANCH`, head the ticket branch, in this repo.
-- Title: `{TICKET_KEY}: {ticket summary}`
-- Body: from `.agents/plans/{TICKET_KEY}.handoff.md` if present; otherwise run `/handoff` first rather than improvising from `git log`.
-- Normal PR, not draft, unless told otherwise. **Never enable auto-merge.**
-- If the plan names a merge-order dependency on the counterpart repo, state it in the PR body.
+- Use `gh pr create` (or `& "C:\Program Files\GitHub CLI\gh.exe" pr create`) to automatically create the pull request:
+  - Load `GH_TOKEN` from `.env.local` or process environment if not logged in.
+  - Base `BASE_BRANCH`, head the ticket branch.
+  - Title: `{TICKET_KEY}: {ticket summary}`
+  - Body: Drawn from `.agents/plan/{TICKET_KEY}.md` plan summary, checklist, and verification results.
+  - Normal PR, not draft, unless told otherwise. **Never enable auto-merge.**
+  - If `gh` creates the PR successfully, capture `PR_URL` from the command output.
 - `PR_URL` ← the new PR's URL.
 
 ### 7. Comment on Jira
