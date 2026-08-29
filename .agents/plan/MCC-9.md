@@ -4,7 +4,7 @@
 - **Repo:** mamun-command-center · **Counterpart:** none — single-repo ticket
 - **Branch:** `sprint-1/MCC-9`
 - **Base:** `main`
-- **Status:** `verified`
+- **Status:** `pr-open`
 - **Last updated:** 2026-08-29
 
 > Working state for this ticket **in this repo**. Tick items as they complete. Survives context compaction and session restarts — `/resume` reads it to find where to continue. Commit it alongside the work.
