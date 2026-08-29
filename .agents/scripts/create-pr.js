@@ -2,7 +2,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Load .env.local if present to get GH_TOKEN if configured
+// Load .env.local if present to read GH_TOKEN if configured
 const envLocalPath = path.join(process.cwd(), '.env.local');
 if (fs.existsSync(envLocalPath)) {
   const envContent = fs.readFileSync(envLocalPath, 'utf8');
@@ -25,7 +25,8 @@ const ghPath = fs.existsSync('C:\\Program Files\\GitHub CLI\\gh.exe')
 
 try {
   const env = { ...process.env };
-  const output = execSync(`${ghPath} pr create --title "${title}" --body "${body.replace(/"/g, '\\"')}" --base "${base}" --head "${head}"`, { env }).toString();
+  const cmd = `${ghPath} pr create --title "${title}" --body "${body.replace(/"/g, '\\"')}" --base "${base}" --head "${head}"`;
+  const output = execSync(cmd, { env }).toString();
   console.log(output);
 } catch (err) {
   const errorMsg = err.stdout ? err.stdout.toString() : err.stderr ? err.stderr.toString() : err.message;
