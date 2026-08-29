@@ -46,13 +46,13 @@ Match on the URL, not on the phrase "PR opened" — otherwise the counterpart re
 
 ### 6. Create the PR
 
-- Use `gh pr create` (or `& "C:\Program Files\GitHub CLI\gh.exe" pr create`) to automatically create the pull request:
-  - Load `GH_TOKEN` from `.env.local` or process environment if not logged in.
+- Execute `node .agents/scripts/create-pr.js "{TICKET_KEY}: {ticket summary}" "{PR body}" "{BASE_BRANCH}" "{TICKET_BRANCH}"` (or `gh pr create`):
+  - Automatically loads `GH_TOKEN` from `.env.local` or environment.
   - Base `BASE_BRANCH`, head the ticket branch.
   - Title: `{TICKET_KEY}: {ticket summary}`
   - Body: Drawn from `.agents/plan/{TICKET_KEY}.md` plan summary, checklist, and verification results.
   - Normal PR, not draft, unless told otherwise. **Never enable auto-merge.**
-  - If `gh` creates the PR successfully, capture `PR_URL` from the command output.
+  - Capture `PR_URL` from the command output.
 - `PR_URL` ← the new PR's URL.
 
 ### 7. Comment on Jira
