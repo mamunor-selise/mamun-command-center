@@ -43,11 +43,11 @@ export interface NavItem {
           class="flex items-center gap-3 group min-w-0"
         >
           <div class="h-9 w-9 shrink-0 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-400 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-            M
+            S
           </div>
           @if (!layoutService.isCollapsed() || layoutService.isMobileOpen()) {
             <div class="truncate transition-opacity duration-200">
-              <span class="text-sm font-bold text-slate-900 dark:text-white tracking-wide block truncate">Mamun Center</span>
+              <span class="text-sm font-bold text-slate-900 dark:text-white tracking-wide block truncate">SecureOps Center</span>
               <span class="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold tracking-wider uppercase block">Personal Suite</span>
             </div>
           }

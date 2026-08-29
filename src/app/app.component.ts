@@ -24,7 +24,7 @@ import { AuthService } from './core/services/auth.service';
       <app-auth-page></app-auth-page>
     </ng-container>
 
-    <!-- AUTHENTICATED VIEW: Full Mamun Command Center Application Workspace -->
+    <!-- AUTHENTICATED VIEW: Full SecureOps Center Application Workspace -->
     <ng-container *ngIf="authService.isAuthenticated()">
       <div class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col md:flex-row selection:bg-indigo-500 selection:text-white transition-colors duration-200">
         <!-- Left Navigation Menu Sidebar -->
@@ -42,7 +42,7 @@ import { AuthService } from './core/services/auth.service';
 
           <!-- Page Footer -->
           <footer class="border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950 px-6 py-4 text-center text-xs text-slate-500 transition-colors print:hidden">
-            Mamun Command Center • Dark & Light Mode Theme Support (MCC-3)
+            SecureOps Center • Dark & Light Mode Theme Support (MCC-3)
           </footer>
         </div>
 
@@ -53,6 +53,6 @@ import { AuthService } from './core/services/auth.service';
   `
 })
 export class AppComponent {
-  title = 'mamun-command-center';
+  title = 'secure-ops-center';
   authService = inject(AuthService);
 }

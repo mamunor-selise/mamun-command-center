@@ -76,7 +76,7 @@ export class ChatbotService {
       const apiMessages = [
         {
           role: 'system',
-          content: 'You are Mamun\'s AI Command Center Assistant. Help Mamun manage his daily routine, CVs, and technical quizzes efficiently, professionally, and concisely. Keep answers clear, engaging, and well-structured.'
+          content: 'You are SecureOps AI Assistant. Help users manage daily routines, CVs, and technical quizzes efficiently, professionally, and concisely. Keep answers clear, engaging, and well-structured.'
         },
         ...messages.map((m) => ({
           role: m.sender === 'user' ? 'user' : 'assistant',
@@ -117,7 +117,7 @@ export class ChatbotService {
               'Authorization': `Bearer ${userCustomKey}`,
               'Content-Type': 'application/json',
               'HTTP-Referer': 'http://localhost:4200',
-              'X-Title': 'Mamun Command Center'
+              'X-Title': 'SecureOps Center'
             },
             body
           });
@@ -131,7 +131,7 @@ export class ChatbotService {
               'Authorization': `Bearer ${userCustomKey}`,
               'Content-Type': 'application/json',
               'HTTP-Referer': 'http://localhost:4200',
-              'X-Title': 'Mamun Command Center'
+              'X-Title': 'SecureOps Center'
             },
             body
           });

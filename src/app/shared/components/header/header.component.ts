@@ -52,7 +52,7 @@ import { LogoutModalComponent } from '../logout-modal/logout-modal.component';
         <!-- Page Header Breadcrumb / Title -->
         <div class="flex items-center gap-2.5">
           <div class="hidden sm:flex items-center text-slate-400 text-sm">
-            <span>Mamun Center</span>
+            <span>SecureOps Center</span>
             <svg class="w-4 h-4 mx-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -137,7 +137,7 @@ export class HeaderComponent {
       this.currentPageTitle.set('Quiz Test Engine');
       this.currentPageIcon.set('🧪');
     } else {
-      this.currentPageTitle.set('Mamun Command Center');
+      this.currentPageTitle.set('SecureOps Center');
       this.currentPageIcon.set('⚡');
     }
   }

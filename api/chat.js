@@ -40,7 +40,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'https://mamun-command-center.vercel.app',
-        'X-Title': 'Mamun Command Center'
+        'X-Title': 'SecureOps Center'
       },
       body: JSON.stringify({
         model: model || 'deepseek/deepseek-chat',
