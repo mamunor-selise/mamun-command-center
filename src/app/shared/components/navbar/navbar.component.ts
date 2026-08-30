@@ -12,10 +12,10 @@ import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
         <!-- Logo / Brand -->
         <a routerLink="/" class="flex items-center gap-3 group">
           <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-400 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-            M
+            S
           </div>
           <div>
-            <span class="text-base font-bold text-slate-900 dark:text-white tracking-wide block">Mamun Command Center</span>
+            <span class="text-base font-bold text-slate-900 dark:text-white tracking-wide block">SecureOps Center</span>
             <span class="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium tracking-wider uppercase block">Personal Suite</span>
           </div>
         </a>

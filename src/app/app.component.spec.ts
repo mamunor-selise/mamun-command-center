@@ -16,10 +16,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'mamun-command-center' title`, () => {
+  it(`should have the 'secure-ops-center' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('mamun-command-center');
+    expect(app.title).toEqual('secure-ops-center');
   });
 
   it('should render page heading', () => {

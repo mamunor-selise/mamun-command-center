@@ -17,10 +17,10 @@ import { AuthService } from '../../core/services/auth.service';
       <header class="p-6 md:p-8 flex items-center justify-between relative z-10 max-w-7xl mx-auto w-full">
         <div class="flex items-center gap-3">
           <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20 text-lg">
-            M
+            S
           </div>
           <div>
-            <span class="text-base font-bold tracking-wide block">Mamun Command Center</span>
+            <span class="text-base font-bold tracking-wide block">SecureOps Center</span>
             <span class="text-[10px] text-emerald-400 font-mono font-semibold tracking-wider uppercase block">MongoDB Atlas • Next.js BE</span>
           </div>
         </div>
@@ -131,7 +131,7 @@ import { AuthService } from '../../core/services/auth.service';
 
       <!-- Footer Info -->
       <footer class="p-4 text-center text-[11px] text-slate-500 relative z-10">
-        Mamun Command Center • Connected to MongoDB Atlas & Next.js Serverless API
+        SecureOps Center • Connected to MongoDB Atlas & Next.js Serverless API
       </footer>
     </div>
   `

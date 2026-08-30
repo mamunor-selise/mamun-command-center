@@ -46,11 +46,13 @@ Match on the URL, not on the phrase "PR opened" — otherwise the counterpart re
 
 ### 6. Create the PR
 
-- Base `BASE_BRANCH`, head the ticket branch, in this repo.
-- Title: `{TICKET_KEY}: {ticket summary}`
-- Body: from `.agents/plans/{TICKET_KEY}.handoff.md` if present; otherwise run `/handoff` first rather than improvising from `git log`.
-- Normal PR, not draft, unless told otherwise. **Never enable auto-merge.**
-- If the plan names a merge-order dependency on the counterpart repo, state it in the PR body.
+- Execute `node .agents/scripts/create-pr.js "{TICKET_KEY}: {ticket summary}" "{PR body}" "{BASE_BRANCH}" "{TICKET_BRANCH}"` (or `gh pr create`):
+  - Automatically loads `GH_TOKEN` from `.env.local` or environment.
+  - Base `BASE_BRANCH`, head the ticket branch.
+  - Title: `{TICKET_KEY}: {ticket summary}`
+  - Body: Drawn from `.agents/plan/{TICKET_KEY}.md` plan summary, checklist, and verification results.
+  - Normal PR, not draft, unless told otherwise. **Never enable auto-merge.**
+  - Capture `PR_URL` from the command output.
 - `PR_URL` ← the new PR's URL.
 
 ### 7. Comment on Jira

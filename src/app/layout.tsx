@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mamun Command Center",
+  title: "SecureOps Center",
   description: "Personal Productivity, CV Management, Quiz Engine, and AI Assistant",
 };
 
