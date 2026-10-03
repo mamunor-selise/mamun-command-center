@@ -7,11 +7,22 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI
-    ? [['github'], ['html', { open: 'never' }]]
-    : [['html', { open: 'never' }]],
+    ? [
+        ['list'],
+        ['github'],
+        ['html', { open: 'never' }],
+        ['json', { outputFile: 'playwright-report/results.json' }]
+      ]
+    : [
+        ['list'],
+        ['html', { open: 'never' }],
+        ['json', { outputFile: 'playwright-report/results.json' }]
+      ],
   use: {
     baseURL: 'http://localhost:4200',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
     headless: true,
   },
   projects: [
