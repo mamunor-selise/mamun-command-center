@@ -67,7 +67,7 @@ Set status to `in-progress`. Then, for each checklist item in order:
 2. Implement the change.
 3. **Inner tier:** run `CMD_TEST_ONE` scoped to that file only.
 4. Red → fix and re-run. After `MAX_FIX_ATTEMPTS` consecutive failures, stop and ask.
-5. Green → tick the item in `PLAN_PATH`, append to the log, and **commit** (`COMMIT_FORMAT`).
+5. Green → tick the item in `PLAN_PATH`, append to the log, and **commit** starting with the ticket key (`{TICKET_KEY} - <type>(<scope>) - <description>`). Every commit message MUST start with the ticket key.
 
 At the end of each plan section, run the **section tier**: the containing test directory / test project.
 

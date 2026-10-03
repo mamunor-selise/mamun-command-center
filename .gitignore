@@ -6,3 +6,9 @@ dist
 .vscode
 .idea
 *.log
+
+# Playwright
+/playwright-report/
+/test-results/
+/blob-report/
+/playwright/.cache/
