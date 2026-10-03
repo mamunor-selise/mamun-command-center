@@ -4,7 +4,7 @@
 - **Repo:** mamun-command-center · **Counterpart:** none — single-repo ticket
 - **Branch:** `sprint-1/MCC-12`
 - **Base:** `main`
-- **Status:** `planning`
+- **Status:** `verified`
 - **Last updated:** 2026-10-03
 
 > Working state for this ticket **in this repo**. Tick items as they complete. Survives context compaction and session restarts — `/resume` reads it to find where to continue. Commit it alongside the work.
@@ -34,20 +34,20 @@ Set up Playwright End-to-End (E2E) automation testing for the Angular applicatio
 
 | AC | Covered by | Verified |
 |----|-----------|----------|
-| AC1 — Playwright dependencies, npm scripts & `playwright.config.ts` configured | `playwright.config.ts`, `package.json` | ☐ |
-| AC2 — E2E test suite created covering Auth page & core smoke checks | `e2e/auth.spec.ts`, `e2e/smoke.spec.ts` | ☐ |
-| AC3 — GitHub Actions workflow runs Playwright E2E tests on PR creation/synchronize | `.github/workflows/playwright.yml` | ☐ |
-| AC4 — Artifact upload configured for Playwright HTML report on test failure | `.github/workflows/playwright.yml` | ☐ |
+| AC1 — Playwright dependencies, npm scripts & `playwright.config.ts` configured | `playwright.config.ts`, `package.json` | ☑ |
+| AC2 — E2E test suite created covering Auth page & core smoke checks | `e2e/auth.spec.ts`, `e2e/smoke.spec.ts` | ☑ |
+| AC3 — GitHub Actions workflow runs Playwright E2E tests on PR creation/synchronize | `.github/workflows/playwright.yml` | ☑ |
+| AC4 — Artifact upload configured for Playwright HTML report on test failure | `.github/workflows/playwright.yml` | ☑ |
 
 ## 5. Checklist
 
-- [ ] 1. Install `@playwright/test` and update `package.json` scripts → `package.json`
-- [ ] 2. Create Playwright configuration file → `playwright.config.ts`
-- [ ] 3. Create E2E test suite → `e2e/auth.spec.ts`, `e2e/smoke.spec.ts`
-- [ ] 4. Create GitHub Actions PR workflow → `.github/workflows/playwright.yml`
-- [ ] 5. Update `.gitignore` to ignore Playwright report & result folders → `.gitignore`
-- [ ] 6. Self-review diff against plan + ACs
-- [ ] 7. Gate tier: lint + typecheck + build + test suite + `npm run test:e2e`
+- [x] 1. Install `@playwright/test` and update `package.json` scripts → `package.json`
+- [x] 2. Create Playwright configuration file → `playwright.config.ts`
+- [x] 3. Create E2E test suite → `e2e/auth.spec.ts`, `e2e/smoke.spec.ts`
+- [x] 4. Create GitHub Actions PR workflow → `.github/workflows/playwright.yml`
+- [x] 5. Update `.gitignore` to ignore Playwright report & result folders → `.gitignore`
+- [x] 6. Self-review diff against plan + ACs
+- [x] 7. Gate tier: lint + typecheck + build + test suite + `npm run test:e2e`
 
 ## 6. Open questions
 
