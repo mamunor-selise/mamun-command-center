@@ -62,3 +62,4 @@ Set up Playwright End-to-End (E2E) automation testing for the Angular applicatio
 ## 7. Log
 
 - `2026-10-03` — plan drafted for Playwright automation testing setup on GitHub PRs
+- `2026-10-03` — MCC-12: implemented and verified Playwright E2E testing suite & GitHub Actions workflow
